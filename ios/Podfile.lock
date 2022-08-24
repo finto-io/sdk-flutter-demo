@@ -1,26 +1,28 @@
 PODS:
   - dot-document (3.3.4):
     - sam (= 2.2.0)
-  - dot-face-background-uniformity (4.3.0):
-    - dot-face-core (= 4.3.0)
-  - dot-face-core (4.3.0):
-    - iface (= 4.14.0)
-  - dot-face-detection-fast (4.3.0):
-    - dot-face-core (= 4.3.0)
-  - dot-face-eye-gaze-liveness (4.3.0):
-    - dot-face-core (= 4.3.0)
-  - dot-face-passive-liveness (4.3.0):
-    - dot-face-core (= 4.3.0)
-  - dot-face-verification (4.3.0):
-    - dot-face-core (= 4.3.0)
-  - iface (4.14.0)
-  - kyc-sdk (1.0.4):
+  - dot-face-background-uniformity (4.10.0):
+    - dot-face-core (= 4.10.0)
+  - dot-face-core (4.10.0):
+    - iface (= 4.18.3)
+  - dot-face-detection-fast (4.10.0):
+    - dot-face-core (= 4.10.0)
+  - dot-face-eye-gaze-liveness (4.10.0):
+    - dot-face-core (= 4.10.0)
+  - dot-face-passive-liveness (4.10.0):
+    - dot-face-core (= 4.10.0)
+  - dot-face-verification (4.10.0):
+    - dot-face-core (= 4.10.0)
+  - iface (4.18.3):
+    - onnx (= 1.0.0)
+  - kyc-sdk (1.6.0):
     - dot-document (= 3.3.4)
-    - dot-face-background-uniformity (= 4.3.0)
-    - dot-face-detection-fast (= 4.3.0)
-    - dot-face-eye-gaze-liveness (= 4.3.0)
-    - dot-face-passive-liveness (= 4.3.0)
-    - dot-face-verification (= 4.3.0)
+    - dot-face-background-uniformity (= 4.10.0)
+    - dot-face-detection-fast (= 4.10.0)
+    - dot-face-eye-gaze-liveness (= 4.10.0)
+    - dot-face-passive-liveness (= 4.10.0)
+    - dot-face-verification (= 4.10.0)
+  - onnx (1.0.0)
   - sam (2.2.0)
 
 DEPENDENCIES:
@@ -36,20 +38,22 @@ SPEC REPOS:
     - dot-face-passive-liveness
     - dot-face-verification
     - iface
+    - onnx
     - sam
   https://github.com/vladyslav-shkoda/sdk-kyc-podspecs.git:
     - kyc-sdk
 
 SPEC CHECKSUMS:
   dot-document: f3956d469e3de07509fdda69456f3c9183a4fe35
-  dot-face-background-uniformity: 64d640d43ce4baaf26e9e7f8909b34a2aa4c7af3
-  dot-face-core: f7d546c08b1c4add073b3a8b3cd24386f51f742e
-  dot-face-detection-fast: 07ce73f8ac4d96e9d77c19d53a5fd7d222e42079
-  dot-face-eye-gaze-liveness: 494b7f698cf5d202e727df32d97383f67e22f073
-  dot-face-passive-liveness: 22834bcb8af800e7f3d47bb0296147372e88fb48
-  dot-face-verification: d78c6dcebe62b04242e945a92dca4626736a9992
-  iface: 6278916949386868b03712814828c9431dba28af
-  kyc-sdk: 94ee62f330059d951417a47531b7cd73610b1d48
+  dot-face-background-uniformity: e8448a4b27aa34729d9e3a6080f072bf0f31f8f4
+  dot-face-core: d8c9cf929bebbd90b8ca77afad789220fedc4cc3
+  dot-face-detection-fast: 38579f998488263247d15f0d3354fac77deffbab
+  dot-face-eye-gaze-liveness: adb2edabefc399b876fc930f84eaa3e266d4223c
+  dot-face-passive-liveness: 478c160ea4c4412973fb514dff34675376320cd7
+  dot-face-verification: ff1e3f410ff2cefd7e594ecbdbfc7f9dea6d4c64
+  iface: ff47d41a36f6004c65d9f9a333a4b377a23b249c
+  kyc-sdk: b77e7a26cf4360974198908681dea10242495e12
+  onnx: 9154dfb152168efe0aaf8ca2867835cee4afa69d
   sam: ff662bfee8e834b79001e95f50bd0c4ca943fa98
 
 PODFILE CHECKSUM: 1611112b1d498cfde71a7f37f62b6248a38b6ae0
