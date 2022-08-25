@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		39192E1528B793520039F582 /* ScannerFrontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39192E1428B793520039F582 /* ScannerFrontView.swift */; };
+		39192E1728B793740039F582 /* ScannerBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39192E1628B793740039F582 /* ScannerBackView.swift */; };
+		39192E1928B79A490039F582 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39192E1828B79A490039F582 /* Enums.swift */; };
+		39192E1B28B7B8AD0039F582 /* ScannerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39192E1A28B7B8AD0039F582 /* ScannerFactory.swift */; };
+		39192E1D28B7C43D0039F582 /* ScannerSelfieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39192E1C28B7C43D0039F582 /* ScannerSelfieView.swift */; };
 		39E4F60628AFE03900265828 /* iengine.lic in Resources */ = {isa = PBXBuildFile; fileRef = 39E4F60528AFE03900265828 /* iengine.lic */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -33,6 +38,11 @@
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		39192E1428B793520039F582 /* ScannerFrontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerFrontView.swift; sourceTree = "<group>"; };
+		39192E1628B793740039F582 /* ScannerBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerBackView.swift; sourceTree = "<group>"; };
+		39192E1828B79A490039F582 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		39192E1A28B7B8AD0039F582 /* ScannerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerFactory.swift; sourceTree = "<group>"; };
+		39192E1C28B7C43D0039F582 /* ScannerSelfieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerSelfieView.swift; sourceTree = "<group>"; };
 		39E4F60528AFE03900265828 /* iengine.lic */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iengine.lic; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -115,6 +125,11 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				39192E1428B793520039F582 /* ScannerFrontView.swift */,
+				39192E1628B793740039F582 /* ScannerBackView.swift */,
+				39192E1828B79A490039F582 /* Enums.swift */,
+				39192E1A28B7B8AD0039F582 /* ScannerFactory.swift */,
+				39192E1C28B7C43D0039F582 /* ScannerSelfieView.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -276,6 +291,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				39192E1B28B7B8AD0039F582 /* ScannerFactory.swift in Sources */,
+				39192E1928B79A490039F582 /* Enums.swift in Sources */,
+				39192E1D28B7C43D0039F582 /* ScannerSelfieView.swift in Sources */,
+				39192E1528B793520039F582 /* ScannerFrontView.swift in Sources */,
+				39192E1728B793740039F582 /* ScannerBackView.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,7 +386,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterKycDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.kyc-sdk-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -495,7 +515,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterKycDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.kyc-sdk-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -518,7 +538,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterKycDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.kyc-sdk-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

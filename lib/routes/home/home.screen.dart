@@ -66,7 +66,7 @@ class HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 const Permissions().checkCameraPermission(context, () {
                   if (mounted) {
-                    Navigator.pushNamed(context, '/scanner');
+                    Navigator.pushNamed(context, '/scanner-front');
                   }
                 }, showMessage);
               },
