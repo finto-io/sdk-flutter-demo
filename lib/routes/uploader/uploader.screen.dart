@@ -52,12 +52,12 @@ class _PlatformChannelState extends State<UploaderScreen> {
     });
   }
 
-  void showMessage() {
+  void copy() {
     Clipboard.setData(ClipboardData(text: path)).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            "Address copied to clipboard",
+            "Link copied to clipboard",
             textAlign: TextAlign.center,
           ),
         ),
@@ -90,7 +90,7 @@ class _PlatformChannelState extends State<UploaderScreen> {
                     ))),
             CustomButton(
               label: "Copy link",
-              onPressed: showMessage,
+              onPressed: copy,
             )
           ],
         ),

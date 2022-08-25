@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/ScannerUIKit.dart';
+import 'package:flutter_kyc_demo/components/CustomUIKitView.dart';
 
 class ScannerFrontScreen extends StatefulWidget {
   const ScannerFrontScreen({super.key});
@@ -58,13 +58,15 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(title: const Text('Scan your front ID')),
       body: SafeArea(
-          minimum: const EdgeInsets.all(0.0),
-          child: ScannerUIKit(
-              viewType: ViewTypes.front,
-              onCreated: (instance) {
-                instance.initialize();
-                initEventSubscription();
-              })),
+        minimum: const EdgeInsets.all(0.0),
+        child: CustomUIKitView(
+          viewType: ViewTypes.front,
+          onCreated: (instance) {
+            instance.initialize();
+            initEventSubscription();
+          },
+        ),
+      ),
     );
   }
 }

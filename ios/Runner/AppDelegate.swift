@@ -27,12 +27,15 @@ import WebKit
                 fatalError("rootViewController is not type FlutterViewController")
             }
             
-            let scannerFactoryFront = ScannerFactory(controller: controller, scannerType: ScannerNames.front)
-            let scannerFactoryBack = ScannerFactory(controller: controller, scannerType: ScannerNames.back)
-            let scannerFactorySelfie = ScannerFactory(controller: controller, scannerType: ScannerNames.selfie, getScanningResult: getScanningResult)
-            registrar(forPlugin: ScannerNames.front)?.register(scannerFactoryFront, withId: ScannerNames.front)
-            registrar(forPlugin: ScannerNames.back)?.register(scannerFactoryBack, withId: ScannerNames.back)
-            registrar(forPlugin: ScannerNames.selfie)?.register(scannerFactorySelfie, withId: ScannerNames.selfie)
+            let scannerFactoryFront = Factory(controller: controller, viewType: ViewTypes.front)
+            let scannerFactoryBack = Factory(controller: controller, viewType: ViewTypes.back)
+            let scannerFactorySelfie = Factory(controller: controller, viewType: ViewTypes.selfie, getScanningResult: getScanningResult)
+            let scannerFactoryRecorder = Factory(controller: controller, viewType: ViewTypes.recorder)
+            
+            registrar(forPlugin: ViewTypes.front)?.register(scannerFactoryFront, withId: ViewTypes.front)
+            registrar(forPlugin: ViewTypes.back)?.register(scannerFactoryBack, withId: ViewTypes.back)
+            registrar(forPlugin: ViewTypes.selfie)?.register(scannerFactorySelfie, withId: ViewTypes.selfie)
+            registrar(forPlugin: ViewTypes.recorder)?.register(scannerFactoryRecorder, withId: ViewTypes.recorder)
             
             self.navigationController = UINavigationController(rootViewController: controller)
             self.window.rootViewController = self.navigationController
@@ -137,8 +140,4 @@ import WebKit
         eventSink = nil
         return nil
     }
-    
 }
-
-
-

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/ScannerUIKit.dart';
+import 'package:flutter_kyc_demo/components/CustomUIKitView.dart';
 import 'package:flutter_kyc_demo/routes/scanner/scanner.result.screen.dart';
 
 class ScannerSelfieScreen extends StatefulWidget {
@@ -64,13 +64,15 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(title: const Text('Please take a selfie')),
       body: SafeArea(
-          minimum: const EdgeInsets.all(0.0),
-          child: ScannerUIKit(
-              viewType: ViewTypes.selfie,
-              onCreated: (instance) {
-                instance.initialize();
-                initEventSubscription();
-              })),
+        minimum: const EdgeInsets.all(0.0),
+        child: CustomUIKitView(
+          viewType: ViewTypes.selfie,
+          onCreated: (instance) {
+            instance.initialize();
+            initEventSubscription();
+          },
+        ),
+      ),
     );
   }
 }

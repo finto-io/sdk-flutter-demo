@@ -5,6 +5,7 @@ import 'package:flutter_kyc_demo/routes/scanner/scanner.front.screen.dart';
 import 'package:flutter_kyc_demo/routes/scanner/scanner.result.screen.dart';
 import 'package:flutter_kyc_demo/routes/scanner/scanner.selfie.screen.dart';
 import 'package:flutter_kyc_demo/routes/uploader/uploader.screen.dart';
+import 'package:flutter_kyc_demo/routes/videoRecorder/video.recorder.result.screen.dart';
 import 'package:flutter_kyc_demo/routes/videoRecorder/video.recorder.screen.dart';
 
 void main() {
@@ -18,6 +19,7 @@ void main() {
       '/scanner-selfie': (context) => const ScannerSelfieScreen(),
       '/scanner-result': (context) => const ScannerResultScreen(),
       '/video-recorder': (context) => const VideoRecorderScreen(),
+      '/video-recorder-result': (context) => const VideoRecorderResultScreen(),
     },
   ));
 }

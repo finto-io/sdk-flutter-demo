@@ -1,18 +1,18 @@
 import Flutter
 
-public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStreamHandler {
+public class Factory: NSObject, FlutterPlatformViewFactory, FlutterStreamHandler {
     private var eventSink: FlutterEventSink?
     let controller: FlutterViewController
-    let scannerType: String
+    let viewType: String
     let getScanningResult: ((_ cb: @escaping (_ res: String) -> Void)-> Void)?
     
     init(
         controller: FlutterViewController,
-        scannerType: String,
+        viewType: String,
         getScanningResult: ((_ cb:@escaping (_ res: String) -> Void) -> Void)?  = nil
     ) {
+        self.viewType = viewType
         self.controller = controller
-        self.scannerType = scannerType
         self.getScanningResult = getScanningResult
     }
     
@@ -22,7 +22,7 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
         arguments args: Any?
     ) -> FlutterPlatformView {
         let channel = FlutterMethodChannel(
-            name: scannerType + String(viewId),
+            name: viewType + String(viewId),
             binaryMessenger: controller.binaryMessenger
         )
         
@@ -31,25 +31,33 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
         let eventChannel = FlutterEventChannel(name: channelName,
                                                binaryMessenger: controller.binaryMessenger)
         eventChannel.setStreamHandler(self)
-        if(scannerType == ScannerNames.front) {
+        
+        switch viewType {
+        case ViewTypes.front:
             return ScannerFrontView(frame, viewId: viewId, channel: channel, args: args, callback: callback)
-        } else if (scannerType == ScannerNames.back) {
+        case ViewTypes.back:
             return ScannerBackView(frame, viewId: viewId, channel: channel, args: args, callback: callback)
-        } else {
+        case ViewTypes.selfie:
             return ScannerSelfieView(frame, viewId: viewId, channel: channel, args: args, callback: callback)
+        case ViewTypes.recorder:
+            return VideoRecorderView(frame, viewId: viewId, channel: channel, args: args, callback: callback)
+        default:
+            fatalError("Incompatible viewType with return type FlutterPlatformView")
         }
     }
     
     func getChannelName() -> String {
-        switch scannerType {
-        case ScannerNames.front:
+        switch viewType {
+        case ViewTypes.front:
             return ChannelNames.scannerFrontEventChannel
-        case ScannerNames.back:
+        case ViewTypes.back:
             return ChannelNames.scannerBackEventChannel
-        case ScannerNames.selfie:
-            return ChannelNames.scannerSelfieChannel
+        case ViewTypes.selfie:
+            return ChannelNames.scannerSelfieEventChannel
+        case ViewTypes.recorder:
+            return ChannelNames.recorderEventChannel
         default:
-            return ""
+            fatalError("Incompatible viewType for event channel initialization")
         }
     }
     

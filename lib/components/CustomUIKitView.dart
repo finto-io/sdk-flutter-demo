@@ -2,10 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-typedef ScannerCreateCallback = void Function(
-    ScannerUIKitController controller);
+typedef CustomUIKitCallback = void Function(CustomUIKitController controller);
 
-enum ViewTypes { front, back, selfie }
+enum ViewTypes { front, back, selfie, recorder }
 
 extension ParseToString on ViewTypes {
   String toShortString() {
@@ -13,21 +12,21 @@ extension ParseToString on ViewTypes {
   }
 }
 
-class ScannerUIKit extends StatefulWidget {
-  const ScannerUIKit({
+class CustomUIKitView extends StatefulWidget {
+  const CustomUIKitView({
     super.key,
     required this.viewType,
     required this.onCreated,
   });
 
   final ViewTypes viewType;
-  final ScannerCreateCallback onCreated;
+  final CustomUIKitCallback onCreated;
 
   @override
   State<StatefulWidget> createState() => ScannerUIKitState();
 }
 
-class ScannerUIKitState extends State<ScannerUIKit> {
+class ScannerUIKitState extends State<CustomUIKitView> {
   @override
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -50,14 +49,14 @@ class ScannerUIKitState extends State<ScannerUIKit> {
       return;
     }
     widget
-        .onCreated(ScannerUIKitController(id, widget.viewType.toShortString()));
+        .onCreated(CustomUIKitController(id, widget.viewType.toShortString()));
   }
 }
 
-class ScannerUIKitController {
+class CustomUIKitController {
   late MethodChannel _channel;
 
-  ScannerUIKitController(int id, String viewType) {
+  CustomUIKitController(int id, String viewType) {
     _channel = MethodChannel('$viewType$id');
   }
 

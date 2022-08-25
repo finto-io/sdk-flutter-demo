@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/ScannerUIKit.dart';
+import 'package:flutter_kyc_demo/components/CustomUIKitView.dart';
 
 class ScannerBackScreen extends StatefulWidget {
   const ScannerBackScreen({super.key});
@@ -59,12 +59,13 @@ class _PlatformChannelState extends State<ScannerBackScreen> {
       appBar: AppBar(title: const Text('Scan your back ID')),
       body: SafeArea(
         minimum: const EdgeInsets.all(0.0),
-        child: ScannerUIKit(
-            viewType: ViewTypes.back,
-            onCreated: (instance) {
-              instance.initialize();
-              initEventSubscription();
-            }),
+        child: CustomUIKitView(
+          viewType: ViewTypes.back,
+          onCreated: (instance) {
+            instance.initialize();
+            initEventSubscription();
+          },
+        ),
       ),
     );
   }
