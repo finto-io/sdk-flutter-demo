@@ -8,14 +8,80 @@ import kyc_sdk
 import DotDocument
 import MobileCoreServices
 import UniformTypeIdentifiers
+import Foundation
+import WebKit
+
+public class WebviewFactory : NSObject, FlutterPlatformViewFactory {
+    let controller: FlutterViewController
+    
+    init(controller: FlutterViewController) {
+        self.controller = controller
+    }
+    
+    public func create(
+        withFrame frame: CGRect,
+        viewIdentifier viewId: Int64,
+        arguments args: Any?
+    ) -> FlutterPlatformView {
+        let channel = FlutterMethodChannel(
+            name: "webview" + String(viewId),
+            binaryMessenger: controller.binaryMessenger
+        )
+        return MyWebview(frame, viewId: viewId, channel: channel, args: args)
+    }
+}
+
+public class MyWebview: NSObject, FlutterPlatformView, WKScriptMessageHandler, WKNavigationDelegate {
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        
+    }
+
+    let frame: CGRect
+    let viewId: Int64
+    let channel: FlutterMethodChannel
+    let webview: WKWebView
+    
+    init(_ frame: CGRect, viewId: Int64, channel: FlutterMethodChannel, args: Any?) {
+        self.frame = frame
+        self.viewId = viewId
+        self.channel = channel
+        
+        let config = WKWebViewConfiguration()
+        let webview = WKWebView(frame: frame, configuration: config)
+
+        self.webview = webview
+
+        super.init()
+        
+        channel.setMethodCallHandler({
+            (call: FlutterMethodCall, result: FlutterResult) -> Void in
+            if (call.method == "loadUrl") {
+                let url = call.arguments as! String
+                webview.load(URLRequest(url: URL(string: url)!))
+            }
+        })
+    }
+    
+    public func view() -> UIView {
+        return self.webview
+    }
+}
+
 
 enum ChannelName {
     static let uploaderMethodChannel = "samples.flutter.io/uploaderMethodChannel"
     static let uploaderEventChannel = "samples.flutter.io/uploaderEventChannel"
+    static let scannerMethodChannel = "samples.flutter.io/scannerMethodChannel"
 }
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate, FlutterStreamHandler, FilePickerDelegate {
+@objc class AppDelegate:
+    FlutterAppDelegate,
+    FlutterStreamHandler,
+    FilePickerDelegate,
+    DocumentScanFrontViewControllerDelegate,
+    DocumentScanBackViewControllerDelegate,
+    SelfieAutoCaptureViewControllerDelegate{
     
     private var eventSink: FlutterEventSink?
     var ob:Onboarding?
@@ -26,9 +92,13 @@ enum ChannelName {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
             GeneratedPluginRegistrant.register(with: self)
             
+            
             guard let controller = window?.rootViewController as? FlutterViewController else {
                 fatalError("rootViewController is not type FlutterViewController")
             }
+            
+            let webviewFactory = WebviewFactory(controller: controller)
+            registrar(forPlugin: "webview")?.register(webviewFactory, withId: "webview")
             
             self.navigationController = UINavigationController(rootViewController: controller)
             self.window.rootViewController = self.navigationController
@@ -37,6 +107,7 @@ enum ChannelName {
             
             self.initBaeSdk()
             
+            // Uploader channels
             let uploaderMethodChannel = FlutterMethodChannel(name: ChannelName.uploaderMethodChannel,
                                                              binaryMessenger: controller.binaryMessenger)
             
@@ -45,15 +116,29 @@ enum ChannelName {
             
             uploaderMethodChannel.setMethodCallHandler({
                 [weak self] (call: FlutterMethodCall, result: FlutterResult) -> Void in
-                guard call.method == "openUploader" else {
+                guard call.method == "initUploader" else {
                     result(FlutterMethodNotImplemented)
                     return
                 }
-                self?.openUploader()
+                self?.initUploader()
             })
+            
+            
             
             uploaderEventChannel.setStreamHandler(self)
             
+            // Scanner channels
+            let scannerMethodChannel = FlutterMethodChannel(name: ChannelName.scannerMethodChannel,
+                                                            binaryMessenger: controller.binaryMessenger)
+            
+            scannerMethodChannel.setMethodCallHandler({
+                [weak self] (call: FlutterMethodCall, result: FlutterResult) -> Void in
+                guard call.method == "initScanner" else {
+                    result(FlutterMethodNotImplemented)
+                    return
+                }
+                self?.initScanner()
+            })
             return super.application(application, didFinishLaunchingWithOptions: launchOptions)
         }
     
@@ -71,7 +156,7 @@ enum ChannelName {
         }
     }
     
-    private func openUploader() {
+    private func initUploader() {
         let controller = getPickerController()
         controller.delegate = self
         self.navigationController.present(controller, animated: true)
@@ -113,6 +198,74 @@ enum ChannelName {
         eventSink(["result": "", "uploading": true, "error": nil])
     }
     
+    
+    func initScanner() {
+//        FLNativeView.controller.viewDidLoad()
+//        let controller = DocumentScanFrontViewController()
+//        controller.delegate = self
+//        self.navigationController.pushViewController(controller, animated: true)
+    }
+    
+    func documentScanFrontSuccess(_ controller: DocumentScanFrontViewController) {
+        let controller = DocumentScanBackViewController()
+        controller.delegate = self
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func documentScanFrontFailed(_ controller: DocumentScanFrontViewController, error: DocumentError) {
+        controller.restart()
+    }
+    
+    func documentScanBackSuccess(_ controller: DocumentScanBackViewController) {
+        let controller = SelfieAutoCaptureViewController();
+        controller.delegate = self
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func documentScanBackFailed(_ controller: DocumentScanBackViewController, error: DocumentError) {
+        print(error.code)
+        //        if error.code == "NO_CORNERS" {
+        //            controller.restart()
+        //            return
+        //        }
+        //        if error.code == "PAGE_DOESNT_MATCH_DOCUMENT_TYPE_OF_PREVIOUS_PAGE" {
+        //            let controller = DocumentScanFrontViewController()
+        //            controller.delegate = self
+        //        }
+    }
+    
+    func selfieAutoCaptureSuccess(_ controller: SelfieAutoCaptureViewController) {
+        DispatchQueue.main.async {
+            self.ob?.inspectDocument(){ res in
+                DispatchQueue.main.async {
+                    do {
+                        let encoder = JSONEncoder()
+                        encoder.outputFormatting = .prettyPrinted
+                        let data = try encoder.encode(res)
+                        guard let jsonString = String(data: data, encoding: .utf8) else { return }
+                        print(jsonString)
+                        
+                    } catch {
+                        print("Failed to encode JSON")
+                    }
+                }
+            }
+            //            self.navigationController?.popToViewController(self, animated: true)
+        }
+    }
+    
+    func selfieAutoCaptureFailed(_ controller: SelfieAutoCaptureViewController, error: SelfieError) {
+        DispatchQueue.main.async {
+            if error.code == .noFaceFound {
+                controller.restart()
+                return
+            }
+            self.selfieAutoCaptureSuccess(controller)
+        }
+    }
+    
+    
+    
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
         print("onCancel")
         eventSink = nil
@@ -120,3 +273,6 @@ enum ChannelName {
     }
     
 }
+
+
+

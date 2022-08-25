@@ -22,11 +22,11 @@ class _PlatformChannelState extends State<UploaderScreen> {
   static const MethodChannel methodChannel =
       MethodChannel('samples.flutter.io/uploaderMethodChannel');
 
-  Future<void> _callUploader() async {
+  Future<void> initUploader() async {
     try {
-      await methodChannel.invokeMethod('openUploader');
+      await methodChannel.invokeMethod('initUploader');
     } on PlatformException catch (e) {
-      print("error: $e");
+      debugPrint("Error: $e");
     }
   }
 
@@ -36,7 +36,7 @@ class _PlatformChannelState extends State<UploaderScreen> {
     streamSubscription = eventChannel
         .receiveBroadcastStream()
         .listen(_onEvent, onError: _onError);
-    _callUploader();
+    initUploader();
   }
 
   @override
@@ -52,7 +52,7 @@ class _PlatformChannelState extends State<UploaderScreen> {
     });
   }
 
-  void clipboardCopy() {
+  void showMessage() {
     Clipboard.setData(ClipboardData(text: path)).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -66,7 +66,7 @@ class _PlatformChannelState extends State<UploaderScreen> {
   }
 
   void _onError(Object error) {
-    print('error: $error');
+    debugPrint('Error: $error');
   }
 
   @override
@@ -89,8 +89,8 @@ class _PlatformChannelState extends State<UploaderScreen> {
                       ],
                     ))),
             CustomButton(
-              label: "Try again",
-              onPressed: clipboardCopy,
+              label: "Copy link",
+              onPressed: showMessage,
             )
           ],
         ),
