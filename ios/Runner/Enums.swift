@@ -3,9 +3,9 @@ enum ChannelNames {
     static let uploaderEventChannel = "samples.flutter.io/uploaderEventChannel"
     static let scannerEventChannel = "samples.flutter.io/scannerEventChannel"
     
-//    static let scannerFrontEventChannel = "samples.flutter.io/scannerFrontEventChannel"
-//    static let scannerBackEventChannel = "samples.flutter.io/scannerBackEventChannel"
-//    static let scannerBackSelfieChannel = "samples.flutter.io/scannerSelfieEventChannel"
+    static let scannerFrontEventChannel = "samples.flutter.io/scannerFrontEventChannel"
+    static let scannerBackEventChannel = "samples.flutter.io/scannerBackEventChannel"
+    static let scannerSelfieChannel = "samples.flutter.io/scannerSelfieEventChannel"
 }
 
 enum ScannerNames {

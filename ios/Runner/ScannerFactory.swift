@@ -25,7 +25,10 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
             name: scannerType + String(viewId),
             binaryMessenger: controller.binaryMessenger
         )
-        let eventChannel = FlutterEventChannel(name: ChannelNames.scannerEventChannel,
+        
+        let channelName = getChannelName()
+        
+        let eventChannel = FlutterEventChannel(name: channelName,
                                                binaryMessenger: controller.binaryMessenger)
         eventChannel.setStreamHandler(self)
         if(scannerType == ScannerNames.front) {
@@ -35,6 +38,23 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
         } else {
             return ScannerSelfieView(frame, viewId: viewId, channel: channel, args: args, callback: callback)
         }
+    }
+    
+    func getChannelName() -> String {
+        print("scannerType", scannerType)
+        switch scannerType {
+        case ScannerNames.front:
+            return ChannelNames.scannerFrontEventChannel
+        case ScannerNames.back:
+            return ChannelNames.scannerBackEventChannel
+        case ScannerNames.selfie:
+            return ChannelNames.scannerSelfieChannel
+        default:
+            return ""
+        }
+        
+        
+        
     }
     
     func callback(data: [String: String]) {
@@ -47,7 +67,7 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
             eventSink(data)
             return
         }
-       
+        
         getResult() { res in
             var _data = data
             _data.updateValue(res, forKey: "params")

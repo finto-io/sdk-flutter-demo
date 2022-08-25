@@ -71,9 +71,9 @@ class HomeScreenState extends State<HomeScreen> {
             ),
             const Divider(),
             CustomButton(
-              label: 'Result',
+              label: 'Video recorder',
               onPressed: () {
-                Navigator.pushNamed(context, '/scanner-result');
+                Navigator.pushNamed(context, '/video-recorder');
               },
             ),
           ],

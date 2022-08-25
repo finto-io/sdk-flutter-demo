@@ -14,7 +14,7 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
   late StreamSubscription streamSubscription;
 
   static const EventChannel eventChannel =
-      EventChannel('samples.flutter.io/scannerEventChannel');
+      EventChannel('samples.flutter.io/scannerFrontEventChannel');
 
   @override
   void initState() {
@@ -50,6 +50,7 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(title: const Text('Scan your front ID')),
       body: SafeArea(
           minimum: const EdgeInsets.all(0.0),

@@ -26,34 +26,31 @@ class ScannerResultState extends State<ScannerResultScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Scanning result')),
       body: SafeArea(
-        minimum: const EdgeInsets.all(16.0),
-        child: Column(
+        minimum: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 20.0),
+        child: SingleChildScrollView(
+          child: Container(
+              alignment: Alignment.center,
+              child: Text(widget.result ?? "Result not available")),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            SingleChildScrollView(
-              child: Expanded(
-                child: Container(
-                    alignment: Alignment.center,
-                    child: Text(widget.result ?? "Result not available")),
+            Flexible(
+              child: CustomButton(
+                label: "Scan Again",
+                onPressed: scanAgain,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Flexible(
-                  child: CustomButton(
-                    label: "Scan Again",
-                    onPressed: scanAgain,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Flexible(
-                  child: CustomButton(
-                    label: "Back to home screen",
-                    onPressed: backToHome,
-                  ),
-                ),
-              ],
-            )
+            const SizedBox(width: 10),
+            Flexible(
+              child: CustomButton(
+                label: "Back to home screen",
+                onPressed: backToHome,
+              ),
+            ),
           ],
         ),
       ),

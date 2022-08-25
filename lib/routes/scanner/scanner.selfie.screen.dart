@@ -15,7 +15,7 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
   late StreamSubscription streamSubscription;
 
   static const EventChannel eventChannel =
-      EventChannel('samples.flutter.io/scannerEventChannel');
+      EventChannel('samples.flutter.io/scannerSelfieEventChannel');
 
   @override
   void initState() {
@@ -56,6 +56,7 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(title: const Text('Please take a selfie')),
       body: SafeArea(
           minimum: const EdgeInsets.all(0.0),
