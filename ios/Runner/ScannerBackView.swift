@@ -20,8 +20,6 @@ public class ScannerBackView: NSObject, FlutterPlatformView, DocumentScanBackVie
         channel.setMethodCallHandler({
             (call: FlutterMethodCall, result: FlutterResult) -> Void in
             if (call.method == "initScanner") {
-                let data = call.arguments as! String
-                print("BACK initScanner :", data)
                 controller.restart()
             }
         })
@@ -32,7 +30,7 @@ public class ScannerBackView: NSObject, FlutterPlatformView, DocumentScanBackVie
     }
     
     public func documentScanBackFailed(_ controller: DocumentScanBackViewController, error: DocumentError) {
-        self.callback(["type": "scanBackFailed", "params": "Some error"])
+        self.callback(["type": "scanBackFailed", "params": error.code])
     }
     
     public func view() -> UIView {

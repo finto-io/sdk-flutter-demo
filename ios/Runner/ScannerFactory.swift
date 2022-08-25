@@ -4,9 +4,13 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
     private var eventSink: FlutterEventSink?
     let controller: FlutterViewController
     let scannerType: String
-    let getResult: () -> String
+    let getResult: ((_ cb: @escaping (_ res: String) -> Void)-> Void)?
     
-    init(controller: FlutterViewController, scannerType: String, getResult: @escaping () -> String ) {
+    init(
+        controller: FlutterViewController,
+        scannerType: String,
+        getResult: ((_ cb:@escaping (_ res: String) -> Void) -> Void)?  = nil
+    ) {
         self.controller = controller
         self.scannerType = scannerType
         self.getResult = getResult
@@ -24,7 +28,6 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
         let eventChannel = FlutterEventChannel(name: ChannelNames.scannerEventChannel,
                                                binaryMessenger: controller.binaryMessenger)
         eventChannel.setStreamHandler(self)
-        print("scannerType", scannerType);
         if(scannerType == ScannerNames.front) {
             return ScannerFrontView(frame, viewId: viewId, channel: channel, args: args, callback: callback)
         } else if (scannerType == ScannerNames.back) {
@@ -34,21 +37,28 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
         }
     }
     
-    func callback(arg: [String: String]) {
+    func callback(data: [String: String]) {
         guard let eventSink = eventSink else {
             print("dispatcher missing")
             return
         }
-        let res = getResult()
-        print(res)
-        eventSink(arg)
+        
+        guard let getResult = getResult else {
+            eventSink(data)
+            return
+        }
+       
+        getResult() { res in
+            var _data = data
+            _data.updateValue(res, forKey: "params")
+            eventSink(_data)
+        }
     }
     
     public func onListen(withArguments arguments: Any?,
                          eventSink: @escaping FlutterEventSink) -> FlutterError? {
         print("Scanner events onListen")
         self.eventSink = eventSink
-        
         return nil
     }
     

@@ -6,7 +6,7 @@ ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 
 source 'https://github.com/innovatrics/innovatrics-podspecs'
-source 'https://github.com/vladyslav-shkoda/sdk-kyc-podspecs.git'
+source 'https://github.com/finto-io/sdk-kyc-podspecs.git'
 
 project 'Runner', {
   'Debug' => :debug,

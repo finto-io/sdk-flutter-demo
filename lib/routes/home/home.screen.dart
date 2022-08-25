@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_kyc_demo/components/CustomButton.dart';
 
@@ -15,7 +14,6 @@ class Permissions {
       permission = Permission.storage;
     }
     final status = await permission.request();
-    print(status);
     if (status.isGranted) {
       onSuccess.call();
     } else {
@@ -73,9 +71,9 @@ class HomeScreenState extends State<HomeScreen> {
             ),
             const Divider(),
             CustomButton(
-              label: 'Selfie',
+              label: 'Result',
               onPressed: () {
-                // Navigator.pushNamed(context, '/scanner');
+                Navigator.pushNamed(context, '/scanner-result');
               },
             ),
           ],

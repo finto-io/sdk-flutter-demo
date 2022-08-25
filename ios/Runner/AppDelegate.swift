@@ -27,8 +27,8 @@ import WebKit
                 fatalError("rootViewController is not type FlutterViewController")
             }
             
-            let scannerFactoryFront = ScannerFactory(controller: controller, scannerType: ScannerNames.front, getResult: getScanningResult)
-            let scannerFactoryBack = ScannerFactory(controller: controller, scannerType: ScannerNames.back, getResult: getScanningResult)
+            let scannerFactoryFront = ScannerFactory(controller: controller, scannerType: ScannerNames.front)
+            let scannerFactoryBack = ScannerFactory(controller: controller, scannerType: ScannerNames.back)
             let scannerFactorySelfie = ScannerFactory(controller: controller, scannerType: ScannerNames.selfie, getResult: getScanningResult)
             registrar(forPlugin: ScannerNames.front)?.register(scannerFactoryFront, withId: ScannerNames.front)
             registrar(forPlugin: ScannerNames.back)?.register(scannerFactoryBack, withId:ScannerNames.back)
@@ -75,23 +75,20 @@ import WebKit
         }
     }
     
-    private func getScanningResult() -> String {
-        return "Result"
-//        self.ob?.inspectDocument(){ res in
-//            DispatchQueue.main.async {
-//                do {
-//                    let encoder = JSONEncoder()
-//                    encoder.outputFormatting = .prettyPrinted
-//                    let data = try encoder.encode(res)
-//                    // The JSON data is in bytes. Let's printit as a JSON string.
-//                    guard let jsonString = String(data: data, encoding: .utf8) else { return }
-//
-//                } catch {
-//                    print("Failed to encode JSON")
-//                }
-//            }
-//        }
-    }
+    private func getScanningResult(_ cb:@escaping (_ res: String)->Void) -> Void {
+        self.ob?.inspectDocument(){ res in
+          do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let data = try encoder.encode(res)
+            guard let jsonString = String(data: data, encoding: .utf8) else { return }
+            //call callback
+             cb(jsonString)
+          } catch {
+            print("Failed to encode JSON")
+          }
+        }
+      }
     
     private func initUploader() {
         let controller = getPickerController()

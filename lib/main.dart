@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_kyc_demo/routes/home/home.screen.dart';
 import 'package:flutter_kyc_demo/routes/scanner/scanner.back.screen.dart';
 import 'package:flutter_kyc_demo/routes/scanner/scanner.front.screen.dart';
+import 'package:flutter_kyc_demo/routes/scanner/scanner.result.screen.dart';
 import 'package:flutter_kyc_demo/routes/scanner/scanner.selfie.screen.dart';
 import 'package:flutter_kyc_demo/routes/uploader/uploader.screen.dart';
 
@@ -14,6 +15,7 @@ void main() {
       '/scanner-front': (context) => const ScannerFrontScreen(),
       '/scanner-back': (context) => const ScannerBackScreen(),
       '/scanner-selfie': (context) => const ScannerSelfieScreen(),
+      '/scanner-result': (context) => const ScannerResultScreen(),
     },
   ));
 }

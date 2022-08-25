@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_kyc_demo/components/Scanner.dart';
+import 'package:flutter_kyc_demo/routes/scanner/scanner.result.screen.dart';
 
 class ScannerSelfieScreen extends StatefulWidget {
   const ScannerSelfieScreen({super.key});
@@ -35,10 +36,14 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
 
   _onEvent(event) {
     var type = event["type"];
-    debugPrint("flutter front: $event");
-    if (type == "selfieSuccess" && mounted) {
-      print("GOOOO");
-      // Navigator.pushNamed(context, '/scanner-back');
+    debugPrint("flutter selfie: $event");
+    if (type == "scanSelfieSuccess" && mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute<String>(
+          builder: (context) => ScannerResultScreen(result: event["params"]),
+        ),
+      );
     } else {
       debugPrint("Error: $event['params']");
     }

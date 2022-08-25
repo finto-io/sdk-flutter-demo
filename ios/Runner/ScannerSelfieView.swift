@@ -21,9 +21,7 @@ public class ScannerSelfieView: NSObject, FlutterPlatformView, SelfieAutoCapture
         channel.setMethodCallHandler({
             (call: FlutterMethodCall, result: FlutterResult) -> Void in
             if (call.method == "initScanner") {
-                let data = call.arguments as! String
-                print("Selfie initScanner: ", data)
-                controller.start()
+                controller.restart()
             }
         })
     }
@@ -34,7 +32,7 @@ public class ScannerSelfieView: NSObject, FlutterPlatformView, SelfieAutoCapture
     }
     
     public func selfieAutoCaptureFailed(_ controller: SelfieAutoCaptureViewController, error: SelfieError) {
-        self.callback(["type": "scanSelfieFailed", "params": "Some error"])
+        self.callback(["type": "scanSelfieFailed", "params": String(describing: error.code)])
     }
     
     public func view() -> UIView {
