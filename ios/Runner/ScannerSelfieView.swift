@@ -20,7 +20,7 @@ public class ScannerSelfieView: NSObject, FlutterPlatformView, SelfieAutoCapture
         controller.delegate = self
         channel.setMethodCallHandler({
             (call: FlutterMethodCall, result: FlutterResult) -> Void in
-            if (call.method == "initScanner") {
+            if (call.method == "initialize") {
                 controller.restart()
             }
         })

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/Scanner.dart';
+import 'package:flutter_kyc_demo/components/ScannerUIKit.dart';
 import 'package:flutter_kyc_demo/routes/scanner/scanner.result.screen.dart';
 
 class ScannerSelfieScreen extends StatefulWidget {
@@ -36,7 +36,6 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
 
   _onEvent(event) {
     var type = event["type"];
-    debugPrint("flutter selfie: $event");
     if (type == "scanSelfieSuccess" && mounted) {
       Navigator.push(
         context,
@@ -45,12 +44,18 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
         ),
       );
     } else {
-      debugPrint("Error: $event['params']");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red.shade900,
+        content: Text(
+          "$event['params']",
+          textAlign: TextAlign.left,
+        ),
+      ));
     }
   }
 
   _onError(error) {
-    debugPrint("Error:$error");
+    debugPrint("Error: $error");
   }
 
   @override
@@ -60,10 +65,10 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
       appBar: AppBar(title: const Text('Please take a selfie')),
       body: SafeArea(
           minimum: const EdgeInsets.all(0.0),
-          child: Scanner(
+          child: ScannerUIKit(
               viewType: ViewTypes.selfie,
-              onScannerCreated: (instance) {
-                instance.initScanner("SELFIE!!!!");
+              onCreated: (instance) {
+                instance.initialize();
                 initEventSubscription();
               })),
     );

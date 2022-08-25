@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/Scanner.dart';
+import 'package:flutter_kyc_demo/components/ScannerUIKit.dart';
 
 class ScannerFrontScreen extends StatefulWidget {
   const ScannerFrontScreen({super.key});
@@ -35,16 +35,21 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
 
   _onEvent(event) {
     var type = event["type"];
-    debugPrint("flutter front: $event");
     if (type == "scanFrontSuccess" && mounted) {
       Navigator.pushNamed(context, '/scanner-back');
     } else {
-      debugPrint("Error: $event['params']");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red.shade900,
+        content: Text(
+          "$event['params']",
+          textAlign: TextAlign.left,
+        ),
+      ));
     }
   }
 
   _onError(error) {
-    debugPrint("Error:$error");
+    debugPrint("Error: $error");
   }
 
   @override
@@ -54,10 +59,10 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
       appBar: AppBar(title: const Text('Scan your front ID')),
       body: SafeArea(
           minimum: const EdgeInsets.all(0.0),
-          child: Scanner(
+          child: ScannerUIKit(
               viewType: ViewTypes.front,
-              onScannerCreated: (instance) {
-                instance.initScanner("FRONT!!!!");
+              onCreated: (instance) {
+                instance.initialize();
                 initEventSubscription();
               })),
     );

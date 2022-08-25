@@ -65,7 +65,7 @@ class _PlatformChannelState extends State<UploaderScreen> {
     });
   }
 
-  void _onError(Object error) {
+  void _onError(error) {
     debugPrint('Error: $error');
   }
 

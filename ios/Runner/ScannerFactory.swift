@@ -4,16 +4,16 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
     private var eventSink: FlutterEventSink?
     let controller: FlutterViewController
     let scannerType: String
-    let getResult: ((_ cb: @escaping (_ res: String) -> Void)-> Void)?
+    let getScanningResult: ((_ cb: @escaping (_ res: String) -> Void)-> Void)?
     
     init(
         controller: FlutterViewController,
         scannerType: String,
-        getResult: ((_ cb:@escaping (_ res: String) -> Void) -> Void)?  = nil
+        getScanningResult: ((_ cb:@escaping (_ res: String) -> Void) -> Void)?  = nil
     ) {
         self.controller = controller
         self.scannerType = scannerType
-        self.getResult = getResult
+        self.getScanningResult = getScanningResult
     }
     
     public func create(
@@ -41,7 +41,6 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
     }
     
     func getChannelName() -> String {
-        print("scannerType", scannerType)
         switch scannerType {
         case ScannerNames.front:
             return ChannelNames.scannerFrontEventChannel
@@ -52,23 +51,19 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
         default:
             return ""
         }
-        
-        
-        
     }
     
     func callback(data: [String: String]) {
         guard let eventSink = eventSink else {
-            print("dispatcher missing")
             return
         }
         
-        guard let getResult = getResult else {
+        guard let getScanningResult = getScanningResult else {
             eventSink(data)
             return
         }
         
-        getResult() { res in
+        getScanningResult() { res in
             var _data = data
             _data.updateValue(res, forKey: "params")
             eventSink(_data)
@@ -77,13 +72,11 @@ public class ScannerFactory: NSObject, FlutterPlatformViewFactory, FlutterStream
     
     public func onListen(withArguments arguments: Any?,
                          eventSink: @escaping FlutterEventSink) -> FlutterError? {
-        print("Scanner events onListen")
         self.eventSink = eventSink
         return nil
     }
     
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        print("Scanner events onCancel")
         eventSink = nil
         return nil
     }

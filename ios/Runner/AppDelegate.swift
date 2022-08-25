@@ -15,7 +15,7 @@ import WebKit
 {
     private let URL_PATH = "https://bl4-dev-02.baelab.net/api/BAF3E974-52AA-7598-FF04-56945EF93500/48EE4790-8AEF-FEA5-FFB6-202374C61700"
     private var eventSink: FlutterEventSink?
-    var ob:Onboarding?
+    var kyc:Onboarding?
     var navigationController: UINavigationController!
     
     override func application(
@@ -29,10 +29,10 @@ import WebKit
             
             let scannerFactoryFront = ScannerFactory(controller: controller, scannerType: ScannerNames.front)
             let scannerFactoryBack = ScannerFactory(controller: controller, scannerType: ScannerNames.back)
-            let scannerFactorySelfie = ScannerFactory(controller: controller, scannerType: ScannerNames.selfie, getResult: getScanningResult)
+            let scannerFactorySelfie = ScannerFactory(controller: controller, scannerType: ScannerNames.selfie, getScanningResult: getScanningResult)
             registrar(forPlugin: ScannerNames.front)?.register(scannerFactoryFront, withId: ScannerNames.front)
-            registrar(forPlugin: ScannerNames.back)?.register(scannerFactoryBack, withId:ScannerNames.back)
-            registrar(forPlugin: ScannerNames.selfie)?.register(scannerFactorySelfie, withId:ScannerNames.selfie)
+            registrar(forPlugin: ScannerNames.back)?.register(scannerFactoryBack, withId: ScannerNames.back)
+            registrar(forPlugin: ScannerNames.selfie)?.register(scannerFactorySelfie, withId: ScannerNames.selfie)
             
             self.navigationController = UINavigationController(rootViewController: controller)
             self.window.rootViewController = self.navigationController
@@ -64,31 +64,31 @@ import WebKit
     
     private func initializeSDK() {
         if let url = Bundle.main.url(forResource: "iengine", withExtension: "lic") {
-            let URL_PATH: String = URL_PATH;
             do {
                 let license = try Data(contentsOf: url)
-                ob = Onboarding(license:license, baseURL: URL(string: URL_PATH)!)
-                ob?.initialize()
+                kyc = Onboarding(license:license, baseURL: URL(string: URL_PATH)!)
+                kyc?.initialize()
             } catch {
+                print("Failed to initialize sdk")
                 return
             }
         }
     }
     
     private func getScanningResult(_ cb:@escaping (_ res: String)->Void) -> Void {
-        self.ob?.inspectDocument(){ res in
-          do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            let data = try encoder.encode(res)
-            guard let jsonString = String(data: data, encoding: .utf8) else { return }
-            //call callback
-             cb(jsonString)
-          } catch {
-            print("Failed to encode JSON")
-          }
+        self.kyc?.inspectDocument(){ res in
+            do {
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = .prettyPrinted
+                let data = try encoder.encode(res)
+                guard let jsonString = String(data: data, encoding: .utf8) else { return }
+                cb(jsonString)
+            } catch {
+                print("Failed to encode JSON")
+                return
+            }
         }
-      }
+    }
     
     private func initUploader() {
         let controller = getPickerController()
@@ -129,13 +129,11 @@ import WebKit
     
     public func onListen(withArguments arguments: Any?,
                          eventSink: @escaping FlutterEventSink) -> FlutterError? {
-        print("uploader onListen")
         self.eventSink = eventSink
         return nil
     }
     
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        print("onCancel")
         eventSink = nil
         return nil
     }
