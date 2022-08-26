@@ -52,6 +52,7 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
           textAlign: TextAlign.left,
         ),
       ));
+      Navigator.popUntil(context, ModalRoute.withName('/'));
     }
   }
 

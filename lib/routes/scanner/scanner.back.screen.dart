@@ -46,6 +46,7 @@ class _PlatformChannelState extends State<ScannerBackScreen> {
           textAlign: TextAlign.left,
         ),
       ));
+      Navigator.popUntil(context, ModalRoute.withName('/'));
     }
   }
 
