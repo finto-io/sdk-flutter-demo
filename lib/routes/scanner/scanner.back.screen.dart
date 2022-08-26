@@ -38,10 +38,11 @@ class _PlatformChannelState extends State<ScannerBackScreen> {
     if (type == "scanBackSuccess" && mounted) {
       Navigator.pushNamed(context, '/scanner-selfie');
     } else {
+      var error = event["params"];
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red.shade900,
         content: Text(
-          "$event['params']",
+          "$error",
           textAlign: TextAlign.left,
         ),
       ));

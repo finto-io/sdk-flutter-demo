@@ -73,26 +73,35 @@ class _PlatformChannelState extends State<UploaderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Uploader')),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButton: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Container(
+          child: path.isNotEmpty
+              ? Flexible(
+                  child: CustomButton(
+                      disabled: isUploading,
+                      label: "Copy link",
+                      onPressed: copy))
+              : Flexible(
+                  child: CustomButton(
+                    disabled: isUploading,
+                    label: "Open picker",
+                    onPressed: initUploader,
+                  ),
+                ),
+        ),
+      ),
       body: SafeArea(
-        minimum: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-                child: Container(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        if (isUploading) const Text("Loading..."),
-                        if (path.isNotEmpty) Text(path)
-                      ],
-                    ))),
-            CustomButton(
-              label: "Copy link",
-              onPressed: copy,
-            )
-          ],
+        minimum: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Container(
+          alignment: Alignment.center,
+          child: Text(isUploading
+              ? 'Loading...'
+              : path.isNotEmpty
+                  ? path
+                  : 'No result'),
         ),
       ),
     );

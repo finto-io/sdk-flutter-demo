@@ -33,16 +33,10 @@ class VideoRecorderResultState extends State<VideoRecorderResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Recording result')),
-      body: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 20.0),
-        child: SingleChildScrollView(
-          child: Container(
-              alignment: Alignment.center,
-              child: Text(widget.result ?? "Result not available")),
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButton: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -60,6 +54,14 @@ class VideoRecorderResultState extends State<VideoRecorderResultScreen> {
               ),
             ),
           ],
+        ),
+      ),
+      body: SafeArea(
+        minimum: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Container(
+              alignment: Alignment.center,
+              child: Text(widget.result ?? "Result not available")),
         ),
       ),
     );
