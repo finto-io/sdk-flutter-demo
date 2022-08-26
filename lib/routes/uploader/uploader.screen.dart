@@ -79,17 +79,12 @@ class _PlatformChannelState extends State<UploaderScreen> {
         margin: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Container(
           child: path.isNotEmpty
-              ? Flexible(
-                  child: CustomButton(
-                      disabled: isUploading,
-                      label: "Copy link",
-                      onPressed: copy))
-              : Flexible(
-                  child: CustomButton(
-                    disabled: isUploading,
-                    label: "Open picker",
-                    onPressed: initUploader,
-                  ),
+              ? CustomButton(
+                  disabled: isUploading, label: "Copy link", onPressed: copy)
+              : CustomButton(
+                  disabled: isUploading,
+                  label: "Open picker",
+                  onPressed: initUploader,
                 ),
         ),
       ),
