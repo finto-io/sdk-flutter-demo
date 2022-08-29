@@ -58,7 +58,7 @@ class _PlatformChannelState extends State<ScannerBackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(title: const Text('Scan your back ID')),
+      appBar: AppBar(title: const Text('Scan back of your ID')),
       body: SafeArea(
         minimum: const EdgeInsets.all(0.0),
         child: CustomUIKitView(

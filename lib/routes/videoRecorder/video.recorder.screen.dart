@@ -46,13 +46,13 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen> {
       );
     } else {
       var error = event["params"];
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.red.shade900,
-        content: Text(
-          "$error",
-          textAlign: TextAlign.left,
-        ),
-      ));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   backgroundColor: Colors.red.shade900,
+      //   content: Text(
+      //     "$error",
+      //     textAlign: TextAlign.left,
+      //   ),
+      // ));
     }
   }
 
@@ -64,7 +64,7 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(title: const Text('Hold button 5 seconds')),
+      appBar: AppBar(title: const Text('Hold the button for 5 sec')),
       body: SafeArea(
         minimum: const EdgeInsets.all(0.0),
         child: CustomUIKitView(

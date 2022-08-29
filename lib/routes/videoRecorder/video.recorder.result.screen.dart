@@ -58,11 +58,9 @@ class VideoRecorderResultState extends State<VideoRecorderResultScreen> {
       ),
       body: SafeArea(
         minimum: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Container(
-              alignment: Alignment.center,
-              child: Text(widget.result ?? "Result not available")),
-        ),
+        child: Container(
+            alignment: Alignment.center,
+            child: Text(widget.result ?? "Result not available")),
       ),
     );
   }
