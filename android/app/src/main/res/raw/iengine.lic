@@ -1,0 +1,22 @@
+{
+    "version": "2.1",
+    "contract": {
+        "customer": "finto",
+        "expiration": {
+            "day": 15,
+            "month": 9,
+            "year": 2022
+        },
+        "hwids": [
+            "AGp12fWpjjO9xRID"
+        ],
+        "products": [
+            "iface"
+        ],
+        "idkit": {
+            "database_size": 0,
+            "max_client_connections": 0
+        }
+    },
+    "contract_signature": "H4MHYjI9VIpwCSpepW10D19m4Zn44AwfPmdxdMtzzsEA2Op5cc/IJUW5nuI7zCqzZklsvC6meHiMJX8JYnrSpsruxsyTTJ2c5x76BdlYy18QNF7vvHrjwp85K5ncNB9Dq39MNEPcn2sovKsrwIAIU97JbepMseUDSGLu1qV7pdc="
+}

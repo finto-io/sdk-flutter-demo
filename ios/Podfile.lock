@@ -16,7 +16,7 @@ PODS:
   - Flutter (1.0.0)
   - iface (4.18.3):
     - onnx (= 1.0.0)
-  - kyc-sdk (1.6.2):
+  - kyc-sdk (1.6.4):
     - dot-document (= 3.3.4)
     - dot-face-background-uniformity (= 4.10.0)
     - dot-face-detection-fast (= 4.10.0)
@@ -64,7 +64,7 @@ SPEC CHECKSUMS:
   dot-face-verification: ff1e3f410ff2cefd7e594ecbdbfc7f9dea6d4c64
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   iface: ff47d41a36f6004c65d9f9a333a4b377a23b249c
-  kyc-sdk: 5c1d79709a4e23511bc63241cf195d76b06037e3
+  kyc-sdk: 3563f06f820c0ee8baba716457e67f7a99115314
   onnx: 9154dfb152168efe0aaf8ca2867835cee4afa69d
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   sam: ff662bfee8e834b79001e95f50bd0c4ca943fa98

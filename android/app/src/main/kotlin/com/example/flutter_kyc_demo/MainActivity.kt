@@ -1,4 +1,4 @@
-package com.example.flutter_kyc_demo
+package com.bankaletihad.sdk
 
 import io.flutter.embedding.android.FlutterActivity
 
