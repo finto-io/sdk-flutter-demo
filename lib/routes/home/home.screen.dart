@@ -5,19 +5,17 @@ import 'package:flutter_kyc_demo/components/CustomButton.dart';
 
 class Permissions {
   const Permissions();
-  Future<void> checkCameraPermission(BuildContext context,
-      VoidCallback onSuccess, VoidCallback onError) async {
-    late Permission permission;
-    if (Platform.isIOS) {
-      permission = Permission.camera;
-    } else {
-      permission = Permission.storage;
-    }
-    final status = await permission.request();
-    if (status.isGranted) {
+  Future<void> checkPermission(BuildContext context, VoidCallback onSuccess,
+      VoidCallback onError) async {
+    if (await Permission.camera.request().isGranted) {
       onSuccess.call();
     } else {
-      onError.call();
+      final status = await Permission.camera.request();
+      if (status.isGranted) {
+        onSuccess.call();
+      } else {
+        onError.call();
+      }
     }
   }
 }
@@ -29,6 +27,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  void checkPermission() {
+    const Permissions()
+        .checkPermission(context, navigateToScanner, showMessage);
+  }
+
+  void navigateToScanner() {
+    if (mounted) {
+      Navigator.pushNamed(context, '/scanner-front');
+    }
+  }
+
   void showMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -61,13 +70,7 @@ class HomeScreenState extends State<HomeScreen> {
             const Divider(),
             CustomButton(
               label: 'Scan documents',
-              onPressed: () {
-                const Permissions().checkCameraPermission(context, () {
-                  if (mounted) {
-                    Navigator.pushNamed(context, '/scanner-front');
-                  }
-                }, showMessage);
-              },
+              onPressed: checkPermission,
             ),
             const Divider(),
             CustomButton(

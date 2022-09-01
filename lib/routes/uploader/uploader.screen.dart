@@ -46,9 +46,10 @@ class _PlatformChannelState extends State<UploaderScreen> {
   }
 
   void _onEvent(event) {
+    if (!mounted) return;
     setState(() {
       isUploading = event['uploading'] ?? false;
-      path = event['path'] ?? "";
+      path = event['data'] ?? "";
     });
   }
 

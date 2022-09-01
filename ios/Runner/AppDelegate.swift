@@ -112,21 +112,21 @@ import WebKit
             return
         }
         let res: String = String(describing: urls[0])
-        eventSink(["path": res, "uploading": false, "error": ""])
+        eventSink(["data": res, "uploading": false, "error": ""])
     }
     
     func filePickerFailed(_ controller: FilePicker, error: FilePickerError) {
         guard let eventSink = eventSink else {
             return
         }
-        eventSink(["path": "", "uploading": false, "error": error])
+        eventSink(["data": "", "uploading": false, "error": error])
     }
     
     func filePickerUploadingStarted(_ controller: FilePicker) {
         guard let eventSink = eventSink else {
             return
         }
-        eventSink(["result": "", "uploading": true, "error": ""])
+        eventSink(["data": "", "uploading": true, "error": ""])
     }
     
     
