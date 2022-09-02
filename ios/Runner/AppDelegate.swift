@@ -111,22 +111,21 @@ import WebKit
         guard let eventSink = eventSink else {
             return
         }
-        let res: String = String(describing: urls[0])
-        eventSink(["data": res, "uploading": false, "error": ""])
+        eventSink(["type": ChannelEventTypes.upload_success, "data": String(describing: urls[0])])
     }
     
     func filePickerFailed(_ controller: FilePicker, error: FilePickerError) {
         guard let eventSink = eventSink else {
             return
         }
-        eventSink(["data": "", "uploading": false, "error": error])
+        eventSink(["type": ChannelEventTypes.upload_failed, "data": ""])
     }
     
     func filePickerUploadingStarted(_ controller: FilePicker) {
         guard let eventSink = eventSink else {
             return
         }
-        eventSink(["data": "", "uploading": true, "error": ""])
+        eventSink(["type": ChannelEventTypes.upload_started, "data": ""])
     }
     
     

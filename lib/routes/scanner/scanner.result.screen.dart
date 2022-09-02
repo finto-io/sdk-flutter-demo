@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kyc_demo/components/CustomButton.dart';
+import 'package:flutter_kyc_demo/components/customButton.dart';
+import 'dart:io' show Platform;
 
 class ScannerResultScreen extends StatefulWidget {
   const ScannerResultScreen({super.key, this.result});
@@ -23,6 +24,7 @@ class ScannerResultState extends State<ScannerResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double bottomOffset = Platform.isAndroid ? 20.0 : 0.0;
     return Scaffold(
       appBar: AppBar(title: const Text('Scanning result')),
       body: SafeArea(
@@ -34,7 +36,7 @@ class ScannerResultState extends State<ScannerResultScreen> {
         ),
       ),
       bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+        minimum: EdgeInsets.fromLTRB(16.0, 0, 16.0, bottomOffset),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[

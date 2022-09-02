@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/CustomUIKitView.dart';
+import 'package:flutter_kyc_demo/components/customUiKitView.dart';
+import 'package:flutter_kyc_demo/enums/enums.dart';
 import 'package:flutter_kyc_demo/routes/scanner/scanner.result.screen.dart';
 
 class ScannerSelfieScreen extends StatefulWidget {
@@ -23,9 +24,8 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
   }
 
   void initEventSubscription() {
-    streamSubscription = eventChannel
-        .receiveBroadcastStream()
-        .listen(_onEvent, onError: _onError);
+    streamSubscription =
+        eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
   }
 
   @override
@@ -34,29 +34,38 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
     streamSubscription.cancel();
   }
 
-  _onEvent(event) {
-    var type = event["type"];
-    if (type == "scanSelfieSuccess" && mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute<String>(
-          builder: (context) => ScannerResultScreen(result: event["params"]),
-        ),
-      );
-    } else {
-      var error = event["params"];
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.red.shade900,
-        content: Text(
-          "$error",
-          textAlign: TextAlign.left,
-        ),
-      ));
-      Navigator.popUntil(context, ModalRoute.withName('/'));
+  onEvent(event) {
+    if (!mounted) return;
+    switch (event["type"]) {
+      case "scan_selfie_success":
+        {
+          Navigator.push(
+            context,
+            MaterialPageRoute<String>(
+              builder: (context) => ScannerResultScreen(result: event["data"]),
+            ),
+          );
+        }
+        break;
+      case "scan_selfie_failed":
+        {
+          String error = event['data'];
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red.shade900,
+            content: Text(
+              error,
+              textAlign: TextAlign.left,
+            ),
+          ));
+          Navigator.popUntil(context, ModalRoute.withName('/'));
+        }
+        break;
+      default:
+        break;
     }
   }
 
-  _onError(error) {
+  onError(error) {
     debugPrint("Error: $error");
   }
 

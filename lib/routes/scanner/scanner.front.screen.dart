@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/CustomUIKitView.dart';
+import 'package:flutter_kyc_demo/components/customUiKitView.dart';
+import 'package:flutter_kyc_demo/enums/enums.dart';
 
 class ScannerFrontScreen extends StatefulWidget {
   const ScannerFrontScreen({super.key});
@@ -22,9 +23,8 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
   }
 
   void initEventSubscription() {
-    streamSubscription = eventChannel
-        .receiveBroadcastStream()
-        .listen(_onEvent, onError: _onError);
+    streamSubscription =
+        eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
   }
 
   @override
@@ -33,24 +33,33 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
     streamSubscription.cancel();
   }
 
-  _onEvent(event) {
-    var type = event["type"];
-    if (type == "scanFrontSuccess" && mounted) {
-      Navigator.pushNamed(context, '/scanner-back');
-    } else {
-      var error = event["params"];
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.red.shade900,
-        content: Text(
-          "$error",
-          textAlign: TextAlign.left,
-        ),
-      ));
-      Navigator.popUntil(context, ModalRoute.withName('/'));
+  onEvent(event) {
+    if (!mounted) return;
+    switch (event["type"]) {
+      case "scan_front_success":
+        {
+          Navigator.pushNamed(context, '/scanner-back');
+        }
+        break;
+      case "scan_front_failed":
+        {
+          String error = event['data'];
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red.shade900,
+            content: Text(
+              error,
+              textAlign: TextAlign.left,
+            ),
+          ));
+          Navigator.popUntil(context, ModalRoute.withName('/'));
+        }
+        break;
+      default:
+        break;
     }
   }
 
-  _onError(error) {
+  onError(error) {
     debugPrint("Error: $error");
   }
 

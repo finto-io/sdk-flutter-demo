@@ -27,13 +27,11 @@ public class VideoRecorderView: NSObject, FlutterPlatformView, VideoViewControll
     }
     
     public func videoViewRecordSuccess(_ controller: VideoViewController, _ url: String) {
-        print("videoViewRecordSuccess")
-        self.callback(["type": "videoViewRecordSuccess", "params": url])
+        self.callback(["type": ChannelEventTypes.record_success, "data": url])
     }
     
     public func videoViewRecordFailed(_ controller: VideoViewController, error: Error) {
-        print("videoViewRecordFailed")
-        self.callback(["type": "videoViewRecordFailed", "params": String(describing: error)])
+        self.callback(["type": ChannelEventTypes.record_failedp, "data": String(describing: error)])
     }
     
     public func view() -> UIView {

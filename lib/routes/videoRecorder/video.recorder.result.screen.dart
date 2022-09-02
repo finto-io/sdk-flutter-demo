@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/CustomButton.dart';
+import 'package:flutter_kyc_demo/components/customButton.dart';
+import 'dart:io' show Platform;
 
 class VideoRecorderResultScreen extends StatefulWidget {
   const VideoRecorderResultScreen({super.key, this.result});
@@ -31,12 +32,13 @@ class VideoRecorderResultState extends State<VideoRecorderResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double bottomOffset = Platform.isAndroid ? 20.0 : 0.0;
     return Scaffold(
       appBar: AppBar(title: const Text('Recording result')),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButton: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        margin: EdgeInsets.fromLTRB(16.0, 0, 16.0, bottomOffset),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[

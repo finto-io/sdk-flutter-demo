@@ -1,7 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_kyc_demo/components/CustomButton.dart';
+import 'package:flutter_kyc_demo/components/customButton.dart';
 
 class Permissions {
   const Permissions();

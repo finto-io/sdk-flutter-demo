@@ -1,16 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_kyc_demo/enums/enums.dart';
 
 typedef CustomUIKitCallback = void Function(CustomUIKitController controller);
-
-enum ViewTypes { front, back, selfie, recorder }
-
-extension ParseToString on ViewTypes {
-  String toShortString() {
-    return this.toString().split('.').last;
-  }
-}
 
 class CustomUIKitView extends StatefulWidget {
   const CustomUIKitView({
@@ -31,12 +24,12 @@ class ScannerUIKitState extends State<CustomUIKitView> {
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
       return AndroidView(
-        viewType: widget.viewType.toShortString(),
-        onPlatformViewCreated: _onPlatformViewCreated,
+        viewType: widget.viewType.parse(),
+        // onPlatformViewCreated: _onPlatformViewCreated,
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return UiKitView(
-        viewType: widget.viewType.toShortString(),
+        viewType: widget.viewType.parse(),
         onPlatformViewCreated: _onPlatformViewCreated,
       );
     }
@@ -48,8 +41,7 @@ class ScannerUIKitState extends State<CustomUIKitView> {
     if (widget.onCreated == null) {
       return;
     }
-    widget
-        .onCreated(CustomUIKitController(id, widget.viewType.toShortString()));
+    widget.onCreated(CustomUIKitController(id, widget.viewType.parse()));
   }
 }
 
