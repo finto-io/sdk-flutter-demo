@@ -7,7 +7,7 @@ import 'package:flutter_kyc_demo/enums/enums.dart';
 import 'package:flutter_kyc_demo/routes/scanner/scanner.result.screen.dart';
 
 class ScannerSelfieScreen extends StatefulWidget {
-  const ScannerSelfieScreen({super.key});
+  const ScannerSelfieScreen({Key? key}) : super(key: key);
   @override
   State<ScannerSelfieScreen> createState() => _PlatformChannelState();
 }

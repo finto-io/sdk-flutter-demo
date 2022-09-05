@@ -6,7 +6,7 @@ import 'package:flutter_kyc_demo/components/customUiKitView.dart';
 import 'package:flutter_kyc_demo/enums/enums.dart';
 
 class ScannerBackScreen extends StatefulWidget {
-  const ScannerBackScreen({super.key});
+  const ScannerBackScreen({Key? key}) : super(key: key);
   @override
   State<ScannerBackScreen> createState() => _PlatformChannelState();
 }

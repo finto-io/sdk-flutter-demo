@@ -7,7 +7,7 @@ import 'package:flutter_kyc_demo/enums/enums.dart';
 import 'package:flutter_kyc_demo/routes/videoRecorder/video.recorder.result.screen.dart';
 
 class VideoRecorderScreen extends StatefulWidget {
-  const VideoRecorderScreen({super.key});
+  const VideoRecorderScreen({Key? key}) : super(key: key);
   @override
   State<VideoRecorderScreen> createState() => VideoRecorderScreenState();
 }

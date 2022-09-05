@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_kyc_demo/components/customButton.dart';
 
 class UploaderScreen extends StatefulWidget {
-  const UploaderScreen({super.key});
+  const UploaderScreen({Key? key}) : super(key: key);
   @override
   State<UploaderScreen> createState() => _PlatformChannelState();
 }

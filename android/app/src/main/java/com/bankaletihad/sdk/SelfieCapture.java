@@ -52,8 +52,8 @@ public class SelfieCapture extends DocumentAutoCaptureFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView tw = view.findViewById(R.id.instruction);
-        PreviewView preview = view.findViewById(R.id.preview);
+//        TextView tw = view.findViewById(R.id.instruction);
+//        PreviewView preview = view.findViewById(R.id.preview);
         
 //        preview.bringToFront();
 

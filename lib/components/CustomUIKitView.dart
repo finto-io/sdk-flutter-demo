@@ -7,10 +7,10 @@ typedef CustomUIKitCallback = void Function(CustomUIKitController controller);
 
 class CustomUIKitView extends StatefulWidget {
   const CustomUIKitView({
-    super.key,
+    Key? key,
     required this.viewType,
     required this.onCreated,
-  });
+  }) : super(key: key);
 
   final ViewTypes viewType;
   final CustomUIKitCallback onCreated;

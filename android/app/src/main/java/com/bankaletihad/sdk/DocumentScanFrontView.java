@@ -3,6 +3,7 @@ package com.bankaletihad.sdk;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class DocumentScanFrontView implements PlatformView {
     private final SelfieCapture documentFragment;
     private Context context;
     private int layoutID;
-    private int idid = 1234321;
+    private int idid = 187;
     private FragmentManager fm;
     DocumentScanFrontView(@NonNull Context context, int id, @Nullable Map<String, Object> creationParams) {
         this.fm = (FragmentManager) creationParams.get("fm");
@@ -47,22 +48,20 @@ public class DocumentScanFrontView implements PlatformView {
     @NonNull
     @Override
     public View getView() {
-
         androidx.fragment.app.FragmentContainerView layout = new androidx.fragment.app.FragmentContainerView(context);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-        int interval = 1000; // 1 Second
-        Handler handler = new Handler();
-        Runnable runnable = ()-> {
-            fm.beginTransaction().add(idid, documentFragment).commit();
-
-        };
-
-        handler.postDelayed(runnable, interval);
-        handler.postDelayed(()->{
-
-        }, interval + 1000);
-
         layout.setId(idid);
+        layout.setBackgroundColor(Color.GREEN);
+
+        Handler handler = new Handler();
+
+        handler.postDelayed(() -> {
+            Log.i("FLUTTER", String.valueOf(layout.getId()));
+            fm.beginTransaction().replace(idid, documentFragment).commitAllowingStateLoss();
+
+        }, 2000);
+
+
         return layout;
     }
 

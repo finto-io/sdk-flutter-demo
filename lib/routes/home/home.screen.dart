@@ -20,7 +20,9 @@ class Permissions {
 }
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
+
+  // const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => HomeScreenState();
 }

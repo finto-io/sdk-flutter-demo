@@ -3,7 +3,7 @@ import 'package:flutter_kyc_demo/components/customButton.dart';
 import 'dart:io' show Platform;
 
 class ScannerResultScreen extends StatefulWidget {
-  const ScannerResultScreen({super.key, this.result});
+  const ScannerResultScreen({Key? key, this.result}) : super(key: key);
   final String? result;
   @override
   State<ScannerResultScreen> createState() => ScannerResultState();
