@@ -34,14 +34,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.bankaletihad.sdk"
@@ -67,16 +59,23 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.innovatrics.dot:dot-document:3.3.1'
-    implementation 'com.innovatrics.dot:dot-face-core:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-background-uniformity:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-detection-fast:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-eye-gaze-liveness:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-passive-liveness:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-verification:4.4.0'
+    implementation 'com.innovatrics.dot:dot-document:3.6.1'
 
+    def face = "4.10.2"
+    implementation "com.innovatrics.dot:dot-face-core:$face"
+    implementation "com.innovatrics.dot:dot-face-background-uniformity:$face"
+    implementation "com.innovatrics.dot:dot-face-detection-fast:$face"
+    implementation "com.innovatrics.dot:dot-face-eye-gaze-liveness:$face"
+    implementation "com.innovatrics.dot:dot-face-passive-liveness:$face"
+    implementation "com.innovatrics.dot:dot-face-verification:$face"
 
-    implementation 'com.kyc:sdk-kyc:2.1.2'
+//    implementation 'com.kyc:sdk-kyc:2.1.2'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    def lifecycle_version = "2.5.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
 }
