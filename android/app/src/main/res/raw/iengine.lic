@@ -3,8 +3,8 @@
     "contract": {
         "customer": "finto",
         "expiration": {
-            "day": 15,
-            "month": 9,
+            "day": 3,
+            "month": 10,
             "year": 2022
         },
         "hwids": [
@@ -18,5 +18,5 @@
             "max_client_connections": 0
         }
     },
-    "contract_signature": "H4MHYjI9VIpwCSpepW10D19m4Zn44AwfPmdxdMtzzsEA2Op5cc/IJUW5nuI7zCqzZklsvC6meHiMJX8JYnrSpsruxsyTTJ2c5x76BdlYy18QNF7vvHrjwp85K5ncNB9Dq39MNEPcn2sovKsrwIAIU97JbepMseUDSGLu1qV7pdc="
+    "contract_signature": "kWMzz3zEPrY4Xtar9Cq+/4qbwF+sEgVadRVhHTBh0wfoptHYsjZe50T51EYUPF8SMnoIgA+VsLTWmk7luj28SWkgMHnWM/yZtVqhV9JKYCV8535RP/PiY9rA4mfVgH41Qukkx7bhyWW6FVi14mQXkja5+hGKQq3gKUc/PyKL474="
 }
