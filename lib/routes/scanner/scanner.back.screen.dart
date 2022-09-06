@@ -44,6 +44,7 @@ class _PlatformChannelState extends State<ScannerBackScreen> {
       case "scan_back_failed":
         {
           String error = event['data'];
+          print("ERROR!!!!!!: $error");
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red.shade900,
             content: Text(

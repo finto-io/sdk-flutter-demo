@@ -16,22 +16,23 @@ import java.util.Map;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformView;
 import kyc.BaeError;
-import kyc.ob.DocumentScanFrontFragment;
+import kyc.ob.DocumentScanBackFragment;
 
 import androidx.fragment.app.FragmentManager;
 
-public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFragment.DocumentScanListener {
+public class DocumentScanBackView implements PlatformView, DocumentScanBackFragment.DocumentScanListener {
     @NonNull
-    private final DocumentScanFrontFragment documentFragment;
+    private final DocumentScanBackFragment documentFragment;
     private Context context;
-    private int id = 1;
+    private int id = 2;
     private FragmentManager fm;
     private EventSinkCallBack eventSinkCallBack;
+
     interface EventSinkCallBack {
         void run(HashMap<String, String> res);
     }
 
-    DocumentScanFrontView(
+    DocumentScanBackView(
             @NonNull Context context,
             int id,
             @Nullable Map<String,Object> creationParams,
@@ -40,22 +41,21 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
     ) {
         this.fm = (FragmentManager) creationParams.get("fm");
         this.context = context;
-
         this.eventSinkCallBack = eventSinkCallBack;
-        documentFragment = DocumentScanFrontFragment.newInstance();
+        documentFragment = DocumentScanBackFragment.newInstance();
         documentFragment.setDocumentScanListener(this);
 
         channel.setMethodCallHandler(
-            (call, result) -> {
-                if (call.method.equals("initialize")) {
-                    Handler handler = new Handler();
-                    handler.postDelayed(() -> {
-                        fm.beginTransaction().replace(this.id, documentFragment).commit();
-                    }, 1000);
-                } else {
-                    result.notImplemented();
+                (call, result) -> {
+                    if (call.method.equals("initialize")) {
+                        Handler handler = new Handler();
+                        handler.postDelayed(() -> {
+                            fm.beginTransaction().replace(this.id, documentFragment).commit();
+                        }, 1000);
+                    } else {
+                        result.notImplemented();
+                    }
                 }
-            }
         );
     }
 
@@ -73,17 +73,17 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
     }
 
     @Override
-    public void onDocumentScanFrontSuccess(Bitmap bitmap) {
+    public void onDocumentScanBackSuccess(Bitmap bitmap) {
         eventSinkCallBack.run(new HashMap<String, String>() {{
-            put("type", "scan_front_success");
+            put("type", "scan_back_success");
             put("data", "");
         }});
     }
 
     @Override
-    public void onDocumentScanFrontFailed(BaeError baeError) {
+    public void onDocumentScanBackFailed(BaeError baeError) {
         eventSinkCallBack.run(new HashMap<String, String>() {{
-            put("type", "scan_front_failed");
+            put("type", "scan_back_failed");
             put("data", baeError.getMessage());
         }});
     }

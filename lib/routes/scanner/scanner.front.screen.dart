@@ -36,7 +36,6 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
 
   onEvent(event) {
     if (!mounted) return;
-    debugPrint(event);
     switch (event["type"]) {
       case "scan_front_success":
         {
@@ -46,6 +45,7 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
       case "scan_front_failed":
         {
           String error = event['data'];
+          print("ERROR!!!!!!: $error");
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red.shade900,
             content: Text(
@@ -76,11 +76,8 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
         child: CustomUIKitView(
           viewType: ViewTypes.front,
           onCreated: (instance) {
-            debugPrint("ON CREATED");
-            // instance.initialize();
-            new Future.delayed(
-                const Duration(milliseconds: 2000), initEventSubscription);
-            // initEventSubscription();
+            instance.initialize();
+            initEventSubscription();
           },
         ),
       ),

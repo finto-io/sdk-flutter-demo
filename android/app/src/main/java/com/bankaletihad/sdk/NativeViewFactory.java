@@ -1,8 +1,15 @@
 package com.bankaletihad.sdk;
+
 import android.content.Context;
-import androidx.annotation.Nullable;
+import android.os.Handler;
+import android.os.Looper;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import io.flutter.Log;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -12,66 +19,91 @@ import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.platform.PlatformView;
 import io.flutter.plugin.platform.PlatformViewFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-
 class NativeViewFactory extends PlatformViewFactory {
     FragmentManager fm;
-    private static final String SCAN_EVENT_CHANNEL =  "samples.flutter.io/scannerFrontEventChannel";
-    private static final String UPLOAD_METHOD_CHANNEL =  "samples.flutter.io/12312";
+    private static final String SCAN_FRONT_EVENT_CHANNEL = "samples.flutter.io/scannerFrontEventChannel";
+    private static final String SCAN_BACK_EVENT_CHANNEL = "samples.flutter.io/scannerBackEventChannel";
+    private static final String SCAN_SELFIE_EVENT_CHANNEL = "samples.flutter.io/scannerSelfieEventChannel";
+    private static final String SCAN_RECORD_EVENT_CHANNEL = "samples.flutter.io/recorderEventChannel";
+
     private EventChannel.EventSink EVENT_SINK = null;
-    private FlutterEngine flutterEngine;
-    NativeViewFactory(FragmentManager fm, FlutterEngine flutterEngine) {
+    private final FlutterEngine flutterEngine;
+    private final Views viewType;
+
+    NativeViewFactory(FragmentManager fm, FlutterEngine flutterEngine, Views viewType) {
         super(StandardMessageCodec.INSTANCE);
         this.fm = fm;
         this.flutterEngine = flutterEngine;
-        Log.i("NativeViewFactory", "NativeViewFactory");
-
-
+        this.viewType = viewType;
     }
+
     public void callback(HashMap<String, String> data) {
-        Log.i("TAG", data.toString());
-        Log.i("TAG", EVENT_SINK + "");
-        EVENT_SINK.success(data);
+        final Handler uiThreadHandler = new Handler(Looper.getMainLooper());
+        Log.i("DATA", data.toString());
+        uiThreadHandler.post(() -> {
+            EVENT_SINK.success(data);
+            }
+        );
     }
 
-
+    public String getEventChannelName() {
+        switch (this.viewType) {
+            case front: {
+                return SCAN_FRONT_EVENT_CHANNEL;
+            }
+            case back: {
+                return SCAN_BACK_EVENT_CHANNEL;
+            }
+            case selfie: {
+                return SCAN_SELFIE_EVENT_CHANNEL;
+            }
+            case recorder: {
+                return SCAN_RECORD_EVENT_CHANNEL;
+            }
+            default:
+                Log.i("Error", "MISSING_CHANNEL");
+                return "";
+        }
+    }
 
     @NonNull
     @Override
     public PlatformView create(@NonNull Context context, int id, @Nullable Object args) {
         final Map<String, Object> creationParams = new HashMap<>();
         creationParams.put("fm", fm);
-        Log.e("NativeViewFactory", "NativeViewFactory");
 
-        new EventChannel(flutterEngine.getDartExecutor(), SCAN_EVENT_CHANNEL).setStreamHandler(
+        new EventChannel(flutterEngine.getDartExecutor(), this.getEventChannelName()).setStreamHandler(
                 new EventChannel.StreamHandler() {
                     @Override
                     public void onListen(Object arguments, EventChannel.EventSink events) {
-                        Log.i("TAG", "ON LISTEN");
                         EVENT_SINK = events;
                     }
+
                     @Override
                     public void onCancel(Object arguments) {
-                        Log.i("TAG", "onCancel");
                         EVENT_SINK = null;
                     }
                 }
         );
 
-        new MethodChannel(flutterEngine.getDartExecutor(), UPLOAD_METHOD_CHANNEL).setMethodCallHandler(
-                (call, result) -> {
-                    if (call.method.equals("initUploader")) {
-//                        InitUploader();
-                    } else {
-                        result.notImplemented();
-                    }
-                }
-        );
+        MethodChannel channel = new MethodChannel(flutterEngine.getDartExecutor(), this.viewType.toString() + id);
 
-
-        return new DocumentScanFrontView(context, id, creationParams, this::callback);
+        switch (this.viewType) {
+            case front: {
+                return new DocumentScanFrontView(context, id, creationParams, channel, this::callback);
+            }
+            case back: {
+                return new DocumentScanBackView(context, id, creationParams, channel, this::callback);
+            }
+            case selfie: {
+                return new ScannerSelfieView(context, id, creationParams, channel, this::callback);
+            }
+            case recorder: {
+                return null;
+            }
+            default:
+                Log.i("Error", "MISSING_VIEW");
+                return null;
+        }
     }
-
-
 }
