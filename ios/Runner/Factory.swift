@@ -73,7 +73,7 @@ public class Factory: NSObject, FlutterPlatformViewFactory, FlutterStreamHandler
         
         getScanningResult() { res in
             var _data = data
-            _data.updateValue(res, forKey: "params")
+            _data.updateValue(res, forKey: "data")
             eventSink(_data)
         }
     }
