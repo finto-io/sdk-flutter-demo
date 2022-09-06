@@ -16,7 +16,7 @@ PODS:
   - Flutter (1.0.0)
   - iface (4.18.3):
     - onnx (= 1.0.0)
-  - kyc-sdk (1.6.4):
+  - kyc-sdk (1.6.5):
     - dot-document (= 3.3.4)
     - dot-face-background-uniformity (= 4.10.0)
     - dot-face-detection-fast (= 4.10.0)
@@ -30,12 +30,10 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - kyc-sdk
+  - kyc-sdk (from `../../sdk-kyc-iOS/kyc-sdk.podspec`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
 
 SPEC REPOS:
-  https://github.com/finto-io/sdk-kyc-podspecs.git:
-    - kyc-sdk
   https://github.com/innovatrics/innovatrics-podspecs:
     - dot-document
     - dot-face-background-uniformity
@@ -51,6 +49,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  kyc-sdk:
+    :path: "../../sdk-kyc-iOS/kyc-sdk.podspec"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
@@ -62,13 +62,13 @@ SPEC CHECKSUMS:
   dot-face-eye-gaze-liveness: adb2edabefc399b876fc930f84eaa3e266d4223c
   dot-face-passive-liveness: 478c160ea4c4412973fb514dff34675376320cd7
   dot-face-verification: ff1e3f410ff2cefd7e594ecbdbfc7f9dea6d4c64
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   iface: ff47d41a36f6004c65d9f9a333a4b377a23b249c
-  kyc-sdk: 3563f06f820c0ee8baba716457e67f7a99115314
+  kyc-sdk: 27f79ab3a9345a756de68f85757910ee327807a7
   onnx: 9154dfb152168efe0aaf8ca2867835cee4afa69d
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   sam: ff662bfee8e834b79001e95f50bd0c4ca943fa98
 
-PODFILE CHECKSUM: 25d1e6528931bfaefb8fbc509ca44f38e562792e
+PODFILE CHECKSUM: a567a2a5ea01ca64269ee24f67b6e57c60285257
 
 COCOAPODS: 1.11.3
