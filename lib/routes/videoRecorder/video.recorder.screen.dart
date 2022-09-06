@@ -37,7 +37,7 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen> {
   onEvent(event) {
     if (!mounted) return;
     switch (event["type"]) {
-      case "recording_success":
+      case "record_success":
         {
           Navigator.push(
             context,
@@ -48,7 +48,7 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen> {
           );
         }
         break;
-      case "recording_failed":
+      case "record_failed":
         {
           String error = event['data'];
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
