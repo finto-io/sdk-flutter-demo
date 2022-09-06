@@ -22,7 +22,7 @@ allprojects {
             url = uri("https://maven.pkg.github.com/BankalEtihad/sdk-kyc-Android")
             credentials {
                 username ""
-                password "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"
+                password "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"
             }
         }
     }

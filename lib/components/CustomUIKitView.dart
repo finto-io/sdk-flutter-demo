@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_kyc_demo/enums/enums.dart';
 
@@ -23,9 +25,31 @@ class ScannerUIKitState extends State<CustomUIKitView> {
   @override
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidView(
+      const Map<String, dynamic> creationParams = <String, dynamic>{};
+
+      return PlatformViewLink(
         viewType: widget.viewType.parse(),
-        // onPlatformViewCreated: _onPlatformViewCreated,
+        surfaceFactory: (context, controller) {
+          return AndroidViewSurface(
+            controller: controller as AndroidViewController,
+            gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
+            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+          );
+        },
+        onCreatePlatformView: (params) {
+          return PlatformViewsService.initSurfaceAndroidView(
+            id: params.id,
+            viewType: widget.viewType.parse(),
+            layoutDirection: TextDirection.ltr,
+            creationParams: creationParams,
+            creationParamsCodec: const StandardMessageCodec(),
+            onFocus: () {
+              params.onFocusChanged(true);
+            },
+          )
+            ..addOnPlatformViewCreatedListener(_onPlatformViewCreated)
+            ..create();
+        },
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return UiKitView(

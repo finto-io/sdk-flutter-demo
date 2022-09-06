@@ -23,8 +23,9 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
   }
 
   void initEventSubscription() {
-    streamSubscription =
-        eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
+    debugPrint("Subscribe");
+    // streamSubscription =
+    //     eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
   }
 
   @override
@@ -35,6 +36,7 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
 
   onEvent(event) {
     if (!mounted) return;
+    debugPrint(event);
     switch (event["type"]) {
       case "scan_front_success":
         {
@@ -65,6 +67,7 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("BUILD");
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(title: const Text('Scan front of your ID')),
@@ -73,6 +76,7 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
         child: CustomUIKitView(
           viewType: ViewTypes.front,
           onCreated: (instance) {
+            debugPrint("ON CREATED");
             instance.initialize();
             initEventSubscription();
           },

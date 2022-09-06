@@ -24,6 +24,7 @@ import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.EventSink;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
+import kyc.ob.BaeInitializer;
 //import kyc.Uploader;
 //import kyc.ob.BaeInitializer;
 //import kyc.FilePicker;
@@ -32,6 +33,7 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 public class MainActivity extends FlutterFragmentActivity {
     private static final String UPLOAD_METHOD_CHANNEL = "samples.flutter.io/uploaderMethodChannel";
     private static final String UPLOAD_EVENT_CHANNEL = "samples.flutter.io/uploaderEventChannel";
+
     private static final String UPLOADER_URL = "https://bl4-dev-02.baelab.net/api/BAF3E974-52AA-7598-FF04-56945EF93500/48EE4790-8AEF-FEA5-FFB6-202374C61700";
     private static EventSink EVENT_SINK = null;
     private final Handler uiThreadHandler = new Handler(Looper.getMainLooper());
@@ -41,8 +43,8 @@ public class MainActivity extends FlutterFragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        GeneratedPluginRegistrant.registerWith(this);
-//        BaeInitializer di = new BaeInitializer(this, R.raw.iengine);
-//        di.initialize();
+        BaeInitializer di = new BaeInitializer(this, R.raw.iengine);
+        di.initialize();
     }
 
 
@@ -55,7 +57,8 @@ public class MainActivity extends FlutterFragmentActivity {
          flutterEngine
             .getPlatformViewsController()
             .getRegistry()
-            .registerViewFactory(Views.front.toString(), new NativeViewFactory(fm));
+            .registerViewFactory(Views.front.toString(), new NativeViewFactory(fm,         getFlutterEngine()));
+
 
 
 

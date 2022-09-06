@@ -59,9 +59,9 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.innovatrics.dot:dot-document:3.6.1'
+    implementation 'com.innovatrics.dot:dot-document:3.3.1'
 
-    def face = "4.10.2"
+    def face = "4.4.0"
     implementation "com.innovatrics.dot:dot-face-core:$face"
     implementation "com.innovatrics.dot:dot-face-background-uniformity:$face"
     implementation "com.innovatrics.dot:dot-face-detection-fast:$face"
@@ -69,7 +69,7 @@ dependencies {
     implementation "com.innovatrics.dot:dot-face-passive-liveness:$face"
     implementation "com.innovatrics.dot:dot-face-verification:$face"
 
-//    implementation 'com.kyc:sdk-kyc:2.1.2'
+    implementation 'com.kyc:sdk-kyc:2.2.0'
 
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
