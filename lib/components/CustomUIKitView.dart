@@ -47,7 +47,10 @@ class ScannerUIKitState extends State<CustomUIKitView> {
               params.onFocusChanged(true);
             },
           )
-            ..addOnPlatformViewCreatedListener(_onPlatformViewCreated)
+            ..addOnPlatformViewCreatedListener((int id) {
+              _onPlatformViewCreated(id);
+              params.onPlatformViewCreated(id);
+            })
             ..create();
         },
       );

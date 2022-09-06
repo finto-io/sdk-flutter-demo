@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 
@@ -41,14 +42,17 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
     private int idid = 187;
     private FragmentManager fm;
     private EventChannel.EventSink eventSink;
-    DocumentScanFrontView(@NonNull Context context, int id, @Nullable Map<String, Object> creationParams) {
+    private Callback callback;
+    interface Callback {
+        void run(HashMap<String, String> res);
+    }
+
+    DocumentScanFrontView(@NonNull Context context, int id, @Nullable Map<String, Object> creationParams, Callback callback) {
         this.fm = (FragmentManager) creationParams.get("fm");
         Log.i("FLUTTER", String.valueOf(id));
         this.context = context;
         this.layoutID = id;
-        this.eventSink = (EventChannel.EventSink) creationParams.get("eventSink");
-
-
+        this.callback = callback;
         documentFragment = DocumentScanFrontFragment.newInstance();
         documentFragment.setDocumentScanListener(this);
     }
@@ -64,11 +68,9 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
         Handler handler = new Handler();
 
         handler.postDelayed(() -> {
-
-            Log.i("FLUTTER",           ((Activity)context).findViewById(idid).toString());
             fm.beginTransaction().replace(idid, documentFragment).commitAllowingStateLoss();
 
-        }, 2000);
+        }, 1000);
 
 
         return layout;
@@ -80,9 +82,14 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
 
     @Override
     public void onDocumentScanFrontSuccess(Bitmap bitmap) {
-        Log.i("TAG", "CALLING SUCCESS" + eventSink);
-        eventSink.success(new ResultObject("scan_front_success", ""));
+        callback.run(new HashMap<String, String>() {{
+            put("type", "scan_front_success");
+            put("data", "");
+        }});
     }
+
+
+
 
     @Override
     public void onDocumentScanFrontFailed(BaeError baeError) {

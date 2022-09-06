@@ -24,8 +24,8 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
 
   void initEventSubscription() {
     debugPrint("Subscribe");
-    // streamSubscription =
-    //     eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
+    streamSubscription =
+        eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
   }
 
   @override
@@ -77,8 +77,10 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
           viewType: ViewTypes.front,
           onCreated: (instance) {
             debugPrint("ON CREATED");
-            instance.initialize();
-            initEventSubscription();
+            // instance.initialize();
+            new Future.delayed(
+                const Duration(milliseconds: 2000), initEventSubscription);
+            // initEventSubscription();
           },
         ),
       ),
