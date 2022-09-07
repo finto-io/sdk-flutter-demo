@@ -43,8 +43,6 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> with RouteAware {
 
   onEvent(event) {
     if (!mounted) return;
-    var data = event["data"];
-    print("DATA!!: $data");
     switch (event["type"]) {
       case "scan_selfie_success":
         {
