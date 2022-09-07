@@ -27,19 +27,11 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion 33 //flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    ndkVersion '21.1.6352462'//flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
     }
 
     defaultConfig {
@@ -47,7 +39,7 @@ android {
         applicationId "com.bankaletihad.sdk"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion 21 // flutter.minSdkVersion
+        minSdkVersion 23 // flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -60,6 +52,9 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    packagingOptions {
+        pickFirst '**/*.so'
+    }
 }
 
 flutter {
@@ -68,15 +63,22 @@ flutter {
 
 dependencies {
     implementation 'com.innovatrics.dot:dot-document:3.3.1'
-    implementation 'com.innovatrics.dot:dot-face-core:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-background-uniformity:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-detection-fast:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-eye-gaze-liveness:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-passive-liveness:4.4.0'
-    implementation 'com.innovatrics.dot:dot-face-verification:4.4.0'
 
+    def face = "4.4.0"
+    implementation "com.innovatrics.dot:dot-face-core:$face"
+    implementation "com.innovatrics.dot:dot-face-background-uniformity:$face"
+    implementation "com.innovatrics.dot:dot-face-detection-fast:$face"
+    implementation "com.innovatrics.dot:dot-face-eye-gaze-liveness:$face"
+    implementation "com.innovatrics.dot:dot-face-passive-liveness:$face"
+    implementation "com.innovatrics.dot:dot-face-verification:$face"
 
-    implementation 'com.kyc:sdk-kyc:2.1.2'
+    implementation 'com.kyc:sdk-kyc:2.3.0'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    def lifecycle_version = "2.5.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
 }

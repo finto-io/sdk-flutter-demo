@@ -8,9 +8,12 @@ import 'package:flutter_kyc_demo/routes/uploader/uploader.screen.dart';
 import 'package:flutter_kyc_demo/routes/videoRecorder/video.recorder.result.screen.dart';
 import 'package:flutter_kyc_demo/routes/videoRecorder/video.recorder.screen.dart';
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 void main() {
   runApp(MaterialApp(
     initialRoute: '/',
+    navigatorObservers: [routeObserver],
     routes: {
       '/': (context) => const HomeScreen(),
       '/uploader': (context) => const UploaderScreen(),

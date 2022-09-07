@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_kyc_demo/components/customUiKitView.dart';
 import 'package:flutter_kyc_demo/enums/enums.dart';
+import 'package:flutter_kyc_demo/main.dart';
 
 class ScannerBackScreen extends StatefulWidget {
   const ScannerBackScreen({super.key});
@@ -11,15 +12,28 @@ class ScannerBackScreen extends StatefulWidget {
   State<ScannerBackScreen> createState() => _PlatformChannelState();
 }
 
-class _PlatformChannelState extends State<ScannerBackScreen> {
+class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
   late StreamSubscription streamSubscription;
+  late CustomUIKitController _instance;
 
   static const EventChannel eventChannel =
       EventChannel('samples.flutter.io/scannerBackEventChannel');
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didPopNext() {
+    if (!mounted) return;
+    _instance.restart();
   }
 
   void initEventSubscription() {
@@ -74,6 +88,7 @@ class _PlatformChannelState extends State<ScannerBackScreen> {
           viewType: ViewTypes.back,
           onCreated: (instance) {
             instance.initialize();
+            _instance = instance;
             initEventSubscription();
           },
         ),

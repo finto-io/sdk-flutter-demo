@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_kyc_demo/enums/enums.dart';
 
@@ -23,9 +25,34 @@ class ScannerUIKitState extends State<CustomUIKitView> {
   @override
   Widget build(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidView(
+      const Map<String, dynamic> creationParams = <String, dynamic>{};
+
+      return PlatformViewLink(
         viewType: widget.viewType.parse(),
-        // onPlatformViewCreated: _onPlatformViewCreated,
+        surfaceFactory: (context, controller) {
+          return AndroidViewSurface(
+            controller: controller as AndroidViewController,
+            gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
+            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+          );
+        },
+        onCreatePlatformView: (params) {
+          return PlatformViewsService.initExpensiveAndroidView(
+            id: params.id,
+            viewType: widget.viewType.parse(),
+            layoutDirection: TextDirection.ltr,
+            creationParams: creationParams,
+            creationParamsCodec: const StandardMessageCodec(),
+            onFocus: () {
+              params.onFocusChanged(true);
+            },
+          )
+            ..addOnPlatformViewCreatedListener((int id) {
+              _onPlatformViewCreated(id);
+              params.onPlatformViewCreated(id);
+            })
+            ..create();
+        },
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return UiKitView(
@@ -53,6 +80,21 @@ class CustomUIKitController {
   }
 
   Future<void> initialize() async {
+    if (defaultTargetPlatform == TargetPlatform.android) return;
     return _channel.invokeMethod('initialize');
+  }
+
+  Future<void> startRecording() async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) return;
+    return _channel.invokeMethod('startRecording');
+  }
+
+  Future<void> endRecording() async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) return;
+    return _channel.invokeMethod('endRecording');
+  }
+
+  Future<void> restart() async {
+    return _channel.invokeMethod('restart');
   }
 }

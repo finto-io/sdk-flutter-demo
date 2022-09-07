@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="scan_front" type="id"/>
+    <item name="scan_back" type="id"/>
+    <item name="take_selfie" type="id"/>
+    <item name="video_recorder" type="id"/>
+</resources>

@@ -49,7 +49,7 @@ class ScannerResultState extends State<ScannerResultScreen> {
             const SizedBox(width: 10),
             Flexible(
               child: CustomButton(
-                label: "Back to home screen",
+                label: "Back to home",
                 onPressed: backToHome,
               ),
             ),
