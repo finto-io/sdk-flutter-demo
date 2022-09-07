@@ -50,7 +50,6 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
         documentFrontFragment = DocumentScanFrontFragment.newInstance();
         documentFrontFragment.setDocumentScanListener(this);
 
-
         channel.setMethodCallHandler(
             (call, result) -> {
               if (call.method.equals("restart")) {

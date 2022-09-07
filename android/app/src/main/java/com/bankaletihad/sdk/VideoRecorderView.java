@@ -124,7 +124,10 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
 
     @Override
     public void onVideoRecordLoadingStarted() {
-
+        eventSinkCallBack.run(new HashMap<String, String>() {{
+            put("type", "record_loading_started");
+            put("data", "");
+        }});
     }
 
 }
