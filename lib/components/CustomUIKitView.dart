@@ -9,10 +9,10 @@ typedef CustomUIKitCallback = void Function(CustomUIKitController controller);
 
 class CustomUIKitView extends StatefulWidget {
   const CustomUIKitView({
-    Key? key,
+    super.key,
     required this.viewType,
     required this.onCreated,
-  }) : super(key: key);
+  });
 
   final ViewTypes viewType;
   final CustomUIKitCallback onCreated;
@@ -37,7 +37,7 @@ class ScannerUIKitState extends State<CustomUIKitView> {
           );
         },
         onCreatePlatformView: (params) {
-          return PlatformViewsService.initSurfaceAndroidView(
+          return PlatformViewsService.initExpensiveAndroidView(
             id: params.id,
             viewType: widget.viewType.parse(),
             layoutDirection: TextDirection.ltr,
