@@ -2,10 +2,6 @@ package com.bankaletihad.sdk;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,8 +16,6 @@ import io.flutter.plugin.platform.PlatformView;
 import kyc.BaeError;
 import kyc.ob.DocumentScanFrontFragment;
 
-import androidx.camera.core.Preview;
-import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 

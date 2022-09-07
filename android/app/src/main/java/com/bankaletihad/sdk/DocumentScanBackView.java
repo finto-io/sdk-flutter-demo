@@ -3,9 +3,6 @@ package com.bankaletihad.sdk;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -71,7 +68,7 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
         layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(@NonNull View view) {
-                fm.beginTransaction().replace(R.id.scan_front, (Fragment) documentBackFragment).commitNow();
+                fm.beginTransaction().replace(R.id.scan_back, (Fragment) documentBackFragment).commitNow();
             }
 
             @Override

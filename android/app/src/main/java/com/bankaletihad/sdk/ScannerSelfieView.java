@@ -3,9 +3,6 @@ package com.bankaletihad.sdk;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -72,7 +69,7 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
         layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(@NonNull View view) {
-                fm.beginTransaction().replace(R.id.scan_front, (Fragment) selfieFragment).commitNow();
+                fm.beginTransaction().replace(R.id.take_selfie, (Fragment) selfieFragment).commitNow();
             }
 
             @Override

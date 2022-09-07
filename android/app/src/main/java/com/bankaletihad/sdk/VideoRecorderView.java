@@ -1,15 +1,10 @@
 package com.bankaletihad.sdk;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
-import android.os.Looper;
-import android.text.Layout;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -55,21 +50,26 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
 
         channel.setMethodCallHandler(
             (call, result) -> {
-               if (call.method.equals("restart")) {
-                    fm.beginTransaction().remove(videoFragment).commit();
-                    videoFragment = new VideoFragment();
-                    videoFragment.setVideoRecordListener(this);
-                    fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
-                    Handler handle = new Handler();
-                    handle.postDelayed(() -> {
-                        layout.findViewById(R.id.recordButton).setVisibility(View.GONE);
+                switch (call.method) {
+                    case "restart":
+                        fm.beginTransaction().remove(videoFragment).commit();
+                        videoFragment = new VideoFragment();
+                        videoFragment.setVideoRecordListener(this);
+                        fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
+                        Handler handle = new Handler();
+                        handle.postDelayed(() -> {
+                            layout.findViewById(R.id.recordButton).setVisibility(View.GONE);
                         }, 100);
-                } else if(call.method.equals("startRecording")) {
-                   videoFragment.onTouchDown();
-               } else if (call.method.equals("endRecording")) {
-                   videoFragment.onTouchUp();
-               } else {
-                    result.notImplemented();
+                        break;
+                    case "startRecording":
+                        videoFragment.onTouchDown();
+                        break;
+                    case "endRecording":
+                        videoFragment.onTouchUp();
+                        break;
+                    default:
+                        result.notImplemented();
+                        break;
                 }
             }
         );
