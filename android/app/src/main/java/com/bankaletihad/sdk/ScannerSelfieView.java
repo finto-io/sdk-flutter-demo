@@ -11,13 +11,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.gson.GsonBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformView;
 import kyc.BaeError;
+import kyc.Uploader;
+import kyc.ob.Api;
 import kyc.ob.SelfieAutoCaptureFragment;
+import kyc.ob.responses.DocumentInspectionResponse;
 
 
 public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragment.SelfieListener {
@@ -85,10 +90,29 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
 
     @Override
     public void onSelfieCaptured(Bitmap bitmap) {
-        eventSinkCallBack.run(new HashMap<String, String>() {{
-            put("type", "scan_selfie_success");
-            put("data", "");
-        }});
+        Api api = new Api(context, "");
+        api.inspectDocument(new Api.InspectDocumentsCallback() {
+            @Override
+            public void onSuccess(DocumentInspectionResponse documentInspectionResponse) {
+                String ScanningResult = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .create()
+                        .toJson(documentInspectionResponse, DocumentInspectionResponse.class);
+                eventSinkCallBack.run(new HashMap<String, String>() {{
+                    put("type", "scan_selfie_success");
+                    put("data", ScanningResult);
+                }});
+            }
+
+            @Override
+            public void onFail(BaeError baeError) {
+                eventSinkCallBack.run(new HashMap<String, String>() {{
+                    put("type", "scan_selfie_failed");
+                    put("data", baeError.getMessage());
+                }});
+            }
+        });
+
     }
 
     @Override
