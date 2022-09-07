@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -52,7 +53,10 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
                     handler.postDelayed(() -> {
                         fm.beginTransaction().replace(R.id.scan_front, documentFragment).commit();
                     }, 100);
-                } else {
+                } else if (call.method.equals("restart")) {
+                    Log.i("RESTART", "!!!!!!!!!!!!!!!!!");
+                }
+                 else {
                     result.notImplemented();
                 }
             }
@@ -72,6 +76,15 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
     @Override
     public void dispose() {
     }
+
+    public void onFlutterViewAttached(@NonNull View flutterView) {
+        Log.i("FL:", "onFlutterViewAttached");
+    }
+
+    public void onFlutterViewDetached() {
+        Log.i("FL:", "onFlutterViewDetached");
+    }
+
 
     @Override
     public void onDocumentScanFrontSuccess(Bitmap bitmap) {

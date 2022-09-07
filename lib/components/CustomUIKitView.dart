@@ -82,4 +82,8 @@ class CustomUIKitController {
   Future<void> initialize() async {
     return _channel.invokeMethod('initialize');
   }
+
+  Future<void> restart() async {
+    return _channel.invokeMethod('restart');
+  }
 }

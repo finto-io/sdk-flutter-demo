@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_kyc_demo/components/customUiKitView.dart';
 import 'package:flutter_kyc_demo/enums/enums.dart';
+import 'package:flutter_kyc_demo/main.dart';
 
 class ScannerFrontScreen extends StatefulWidget {
   const ScannerFrontScreen({Key? key}) : super(key: key);
@@ -11,15 +12,35 @@ class ScannerFrontScreen extends StatefulWidget {
   State<ScannerFrontScreen> createState() => _PlatformChannelState();
 }
 
-class _PlatformChannelState extends State<ScannerFrontScreen> {
+class _PlatformChannelState extends State<ScannerFrontScreen> with RouteAware {
   late StreamSubscription streamSubscription;
+
+  late CustomUIKitController _instance;
 
   static const EventChannel eventChannel =
       EventChannel('samples.flutter.io/scannerFrontEventChannel');
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didPush() {
+    print('FLUTTER: didPush ScannerFrontScreen');
+  }
+
+  @override
+  void didPopNext() {
+    // here back button was pressed
+    print('FLUTTER:  didPopNext ScannerFrontScreen');
+    _instance.restart();
   }
 
   void initEventSubscription() {
@@ -32,6 +53,7 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
   void dispose() {
     super.dispose();
     streamSubscription.cancel();
+    routeObserver.unsubscribe(this);
   }
 
   onEvent(event) {
@@ -76,6 +98,7 @@ class _PlatformChannelState extends State<ScannerFrontScreen> {
         child: CustomUIKitView(
           viewType: ViewTypes.front,
           onCreated: (instance) {
+            _instance = instance;
             instance.initialize();
             initEventSubscription();
           },
