@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,7 +25,6 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
     @NonNull
     private final DocumentScanBackFragment documentFragment;
     private Context context;
-    private int id = 2;
     private FragmentManager fm;
     private EventSinkCallBack eventSinkCallBack;
 
@@ -48,10 +48,10 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
         channel.setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.equals("initialize")) {
-                        Handler handler = new Handler();
+                        Handler handler = new Handler(Looper.getMainLooper());
                         handler.postDelayed(() -> {
-                            fm.beginTransaction().replace(this.id, documentFragment).commit();
-                        }, 1000);
+                            fm.beginTransaction().replace(R.id.scan_back, documentFragment).addToBackStack(null).commitAllowingStateLoss();
+                        }, 200);
                     } else {
                         result.notImplemented();
                     }
@@ -64,7 +64,7 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
     public View getView() {
         androidx.fragment.app.FragmentContainerView layout = new androidx.fragment.app.FragmentContainerView(context);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-        layout.setId(this.id);
+        layout.setId(R.id.scan_back);
         return layout;
     }
 

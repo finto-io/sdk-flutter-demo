@@ -23,7 +23,6 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
     @NonNull
     private final SelfieAutoCaptureFragment documentFragment;
     private Context context;
-    private int id = 3;
     private FragmentManager fm;
     private EventSinkCallBack eventSinkCallBack;
 
@@ -50,7 +49,7 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
                     if (call.method.equals("initialize")) {
                         Handler handler = new Handler();
                         handler.postDelayed(() -> {
-                            fm.beginTransaction().replace(this.id, documentFragment).commit();
+                            fm.beginTransaction().replace(R.id.take_selfie, documentFragment).commit();
                         }, 1000);
                     } else {
                         result.notImplemented();
@@ -64,7 +63,7 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
     public View getView() {
         androidx.fragment.app.FragmentContainerView layout = new androidx.fragment.app.FragmentContainerView(context);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-        layout.setId(this.id);
+        layout.setId(R.id.take_selfie);
         return layout;
     }
 
