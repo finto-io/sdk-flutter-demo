@@ -7,7 +7,7 @@ import 'package:flutter_kyc_demo/enums/enums.dart';
 import 'package:flutter_kyc_demo/main.dart';
 
 class ScannerBackScreen extends StatefulWidget {
-  const ScannerBackScreen({Key? key}) : super(key: key);
+  const ScannerBackScreen({super.key});
   @override
   State<ScannerBackScreen> createState() => _PlatformChannelState();
 }
@@ -30,14 +30,10 @@ class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
   }
 
   @override
-  void didPush() {
-    print('FLUTTER: didPush ScannerBackScreen');
-  }
+  void didPush() {}
 
   @override
-  void didPopNext() {
-    print('FLUTTER: didPopNext ScannerBackScreen');
-  }
+  void didPopNext() {}
 
   void initEventSubscription() {
     streamSubscription =

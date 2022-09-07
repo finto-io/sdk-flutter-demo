@@ -4,7 +4,7 @@ import 'package:flutter_kyc_demo/components/customButton.dart';
 import 'dart:io' show Platform;
 
 class VideoRecorderResultScreen extends StatefulWidget {
-  const VideoRecorderResultScreen({Key? key, this.result}) : super(key: key);
+  const VideoRecorderResultScreen({super.key, this.result});
   final String? result;
   @override
   State<VideoRecorderResultScreen> createState() => VideoRecorderResultState();
