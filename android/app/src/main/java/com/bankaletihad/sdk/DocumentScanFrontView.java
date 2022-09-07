@@ -20,6 +20,8 @@ import io.flutter.plugin.platform.PlatformView;
 import kyc.BaeError;
 import kyc.ob.DocumentScanFrontFragment;
 
+import androidx.camera.core.Preview;
+import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -52,22 +54,16 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
         channel.setMethodCallHandler(
             (call, result) -> {
                 if (call.method.equals("initialize")) {
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    final String a = "aag";
-                    handler.postDelayed(() -> {
-//                        fm.beginTransaction().add(R.id.scan_front, (Fragment) documentFrontFragment).commit();
-                    }, 100);
+
                 } else if (call.method.equals("restart")) {
                     Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(() -> {
-                        fm.beginTransaction().remove(documentFrontFragment).commit();
 
-                    }, 100);
-                    handler.postDelayed(() -> {
-                        documentFrontFragment = DocumentScanFrontFragment.newInstance();
-                        documentFrontFragment.setDocumentScanListener(this);
-                        fm.beginTransaction().add(R.id.scan_front, documentFrontFragment).commit();
-                    }, 100);
+                    fm.beginTransaction().remove(documentFrontFragment).commit();
+                    documentFrontFragment = DocumentScanFrontFragment.newInstance();
+                    documentFrontFragment.setDocumentScanListener(this);
+                    fm.beginTransaction().replace(R.id.scan_front, documentFrontFragment).commit();
+
+
                 } else {
                     result.notImplemented();
                 }
@@ -84,7 +80,9 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
         layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(@NonNull View view) {
-                fm.beginTransaction().replace(R.id.scan_front, (Fragment) documentFrontFragment).commit();
+                fm.beginTransaction().replace(R.id.scan_front, (Fragment) documentFrontFragment).commitNow();
+                Handler handler = new Handler(Looper.getMainLooper());
+
             }
 
             @Override

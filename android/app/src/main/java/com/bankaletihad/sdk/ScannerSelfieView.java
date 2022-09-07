@@ -5,11 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.HashMap;
@@ -49,21 +51,14 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
         channel.setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.equals("initialize")) {
-                        Handler handler = new Handler();
-                        handler.postDelayed(() -> {
-                            fm.beginTransaction().replace(R.id.take_selfie, selfieFragment).commit();
-                        }, 100);
-                    } else if (call.method.equals("restart")) {
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        handler.postDelayed(() -> {
-                            fm.beginTransaction().remove(selfieFragment).commit();
 
-                        }, 100);
-                        handler.postDelayed(() -> {
-                            selfieFragment = SelfieAutoCaptureFragment.newInstance();
-                            selfieFragment.setLivelinessListener(this);
-                            fm.beginTransaction().add(R.id.take_selfie, selfieFragment).commit();
-                        }, 100);
+                    } else if (call.method.equals("restart")) {
+
+                        fm.beginTransaction().remove(selfieFragment).commit();
+                        selfieFragment = SelfieAutoCaptureFragment.newInstance();
+                        selfieFragment.setLivelinessListener(this);
+                        fm.beginTransaction().add(R.id.take_selfie, selfieFragment).commit();
+
                     } else {
                         result.notImplemented();
                     }
@@ -78,6 +73,17 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setId(R.id.take_selfie);
         layout.setBackgroundColor(Color.BLACK);
+        layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(@NonNull View view) {
+                fm.beginTransaction().replace(R.id.scan_front, (Fragment) selfieFragment).commitNow();
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull View view) {
+                Log.i("TAG", "onViewDetachedFromWindow");
+            }
+        });
         return layout;
     }
 

@@ -8,6 +8,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,7 @@ import io.flutter.plugin.platform.PlatformView;
 import kyc.BaeError;
 import kyc.ob.VideoFragment;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecordListener {
@@ -50,21 +53,13 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
         channel.setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.equals("initialize")) {
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        handler.postDelayed(() -> {
-                            fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
-                        }, 100);
-                    } else if (call.method.equals("restart")) {
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        handler.postDelayed(() -> {
-                            fm.beginTransaction().remove(videoFragment).commit();
 
-                        }, 100);
-                        handler.postDelayed(() -> {
-                            videoFragment = new VideoFragment();
-                            videoFragment.setVideoRecordListener(this);
-                            fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
-                        }, 100);
+                    } else if (call.method.equals("restart")) {
+                        fm.beginTransaction().remove(videoFragment).commit();
+                        videoFragment = new VideoFragment();
+                        videoFragment.setVideoRecordListener(this);
+                        fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
+
                     } else {
                         result.notImplemented();
                     }
@@ -75,10 +70,22 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
     @NonNull
     @Override
     public View getView() {
-        androidx.fragment.app.FragmentContainerView layout = new androidx.fragment.app.FragmentContainerView(context);
+        LinearLayout layout = new LinearLayout(context);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setId(R.id.video_recorder);
         layout.setBackgroundColor(Color.BLACK);
+        layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(@NonNull View view) {
+                fm.beginTransaction().replace(R.id.video_recorder, (Fragment) videoFragment).commitNow();
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull View view) {
+                Log.i("TAG", "onViewDetachedFromWindow");
+            }
+        });
+
         return layout;
     }
 

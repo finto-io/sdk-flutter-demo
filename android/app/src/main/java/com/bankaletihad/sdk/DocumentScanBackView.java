@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +20,7 @@ import io.flutter.plugin.platform.PlatformView;
 import kyc.BaeError;
 import kyc.ob.DocumentScanBackFragment;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 public class DocumentScanBackView implements PlatformView, DocumentScanBackFragment.DocumentScanListener {
@@ -48,21 +50,13 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
         channel.setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.equals("initialize")) {
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        handler.postDelayed(() -> {
-                            fm.beginTransaction().replace(R.id.scan_back, documentBackFragment).addToBackStack(null).commitAllowingStateLoss();
-                        }, 100);
-                    } else if (call.method.equals("restart")) {
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        handler.postDelayed(() -> {
-                            fm.beginTransaction().remove(documentBackFragment).commit();
 
-                        }, 100);
-                        handler.postDelayed(() -> {
-                            documentBackFragment = DocumentScanBackFragment.newInstance();
-                            documentBackFragment.setDocumentScanListener(this);
-                            fm.beginTransaction().add(R.id.scan_back, documentBackFragment).commit();
-                        }, 100);
+                    } else if (call.method.equals("restart")) {
+                        fm.beginTransaction().remove(documentBackFragment).commit();
+                        documentBackFragment = DocumentScanBackFragment.newInstance();
+                        documentBackFragment.setDocumentScanListener(this);
+                        fm.beginTransaction().add(R.id.scan_back, documentBackFragment).commit();
+
                     } else {
                         result.notImplemented();
                     }
@@ -77,6 +71,18 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setId(R.id.scan_back);
         layout.setBackgroundColor(Color.BLACK);
+        layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(@NonNull View view) {
+                fm.beginTransaction().replace(R.id.scan_front, (Fragment) documentBackFragment).commitNow();
+
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull View view) {
+                Log.i("TAG", "onViewDetachedFromWindow");
+            }
+        });
         return layout;
     }
 
