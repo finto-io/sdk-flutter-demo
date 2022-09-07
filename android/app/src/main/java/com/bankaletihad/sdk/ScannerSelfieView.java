@@ -50,19 +50,15 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
 
         channel.setMethodCallHandler(
                 (call, result) -> {
-                    if (call.method.equals("initialize")) {
-
-                    } else if (call.method.equals("restart")) {
-
-                        fm.beginTransaction().remove(selfieFragment).commit();
-                        selfieFragment = SelfieAutoCaptureFragment.newInstance();
-                        selfieFragment.setLivelinessListener(this);
-                        fm.beginTransaction().add(R.id.take_selfie, selfieFragment).commit();
-
-                    } else {
-                        result.notImplemented();
-                    }
+                 if (call.method.equals("restart")) {
+                    fm.beginTransaction().remove(selfieFragment).commit();
+                    selfieFragment = SelfieAutoCaptureFragment.newInstance();
+                    selfieFragment.setLivelinessListener(this);
+                    fm.beginTransaction().add(R.id.take_selfie, selfieFragment).commit();
+                } else {
+                    result.notImplemented();
                 }
+            }
         );
     }
 

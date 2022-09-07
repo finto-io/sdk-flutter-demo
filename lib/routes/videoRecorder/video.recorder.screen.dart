@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_kyc_demo/components/CustomButton.dart';
 import 'package:flutter_kyc_demo/components/customUiKitView.dart';
 import 'package:flutter_kyc_demo/enums/enums.dart';
 import 'package:flutter_kyc_demo/routes/videoRecorder/video.recorder.result.screen.dart';
@@ -66,7 +67,6 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen>
               textAlign: TextAlign.left,
             ),
           ));
-          Navigator.popUntil(context, ModalRoute.withName('/'));
         }
         break;
       default:
@@ -78,22 +78,43 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen>
     debugPrint("Error: $error");
   }
 
+  void _incrementDown(PointerEvent details) {
+    _instance.startRecording();
+  }
+
+  void _incrementUp(PointerEvent details) {
+    _instance.endRecording();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(title: const Text('Hold the button for 5 sec')),
-      body: SafeArea(
-        minimum: const EdgeInsets.all(0.0),
-        child: CustomUIKitView(
-          viewType: ViewTypes.recorder,
-          onCreated: (instance) {
-            _instance = instance;
-            instance.initialize();
-            initEventSubscription();
-          },
+        backgroundColor: Colors.black,
+        appBar: AppBar(title: const Text('Hold the button for 5 sec')),
+        bottomNavigationBar: SafeArea(
+          minimum: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 20),
+          child: Positioned(
+              bottom: 10,
+              child: Listener(
+                  onPointerDown: _incrementDown,
+                  onPointerUp: _incrementUp,
+                  child: Container(
+                    padding: const EdgeInsets.all(20.0),
+                    color: Colors.orange[900],
+                    child: const Text(
+                      'Hold',
+                    ),
+                  ))),
         ),
-      ),
-    );
+        body: Stack(children: <Widget>[
+          CustomUIKitView(
+            viewType: ViewTypes.recorder,
+            onCreated: (instance) {
+              _instance = instance;
+              instance.initialize();
+              initEventSubscription();
+            },
+          ),
+        ]));
   }
 }

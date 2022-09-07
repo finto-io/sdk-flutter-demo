@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
     private final Context context;
     private final FragmentManager fm;
     private final EventSinkCallBack eventSinkCallBack;
+    private LinearLayout layout;
 
     interface EventSinkCallBack {
         void run(HashMap<String, String> res);
@@ -49,28 +51,35 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
         this.eventSinkCallBack = eventSinkCallBack;
         videoFragment = new VideoFragment();
         videoFragment.setVideoRecordListener(this);
+        videoFragment.setMaxVideoLength(4);
 
         channel.setMethodCallHandler(
-                (call, result) -> {
-                    if (call.method.equals("initialize")) {
-
-                    } else if (call.method.equals("restart")) {
-                        fm.beginTransaction().remove(videoFragment).commit();
-                        videoFragment = new VideoFragment();
-                        videoFragment.setVideoRecordListener(this);
-                        fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
-
-                    } else {
-                        result.notImplemented();
-                    }
+            (call, result) -> {
+               if (call.method.equals("restart")) {
+                    fm.beginTransaction().remove(videoFragment).commit();
+                    videoFragment = new VideoFragment();
+                    videoFragment.setVideoRecordListener(this);
+                    fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
+                    Handler handle = new Handler();
+                    handle.postDelayed(() -> {
+                        layout.findViewById(R.id.recordButton).setVisibility(View.GONE);
+                        }, 100);
+                } else if(call.method.equals("startRecording")) {
+                   videoFragment.onTouchDown();
+               } else if (call.method.equals("endRecording")) {
+                   videoFragment.onTouchUp();
+               } else {
+                    result.notImplemented();
                 }
+            }
         );
     }
+
 
     @NonNull
     @Override
     public View getView() {
-        LinearLayout layout = new LinearLayout(context);
+        layout = new LinearLayout(context);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setId(R.id.video_recorder);
         layout.setBackgroundColor(Color.BLACK);
@@ -78,6 +87,10 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
             @Override
             public void onViewAttachedToWindow(@NonNull View view) {
                 fm.beginTransaction().replace(R.id.video_recorder, (Fragment) videoFragment).commitNow();
+                Handler handle = new Handler();
+                handle.postDelayed(() -> {
+                    view.findViewById(R.id.recordButton).setVisibility(View.GONE);
+                }, 100);
             }
 
             @Override

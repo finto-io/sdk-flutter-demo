@@ -80,7 +80,18 @@ class CustomUIKitController {
   }
 
   Future<void> initialize() async {
+    if (defaultTargetPlatform == TargetPlatform.android) return;
     return _channel.invokeMethod('initialize');
+  }
+
+  Future<void> startRecording() async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) return;
+    return _channel.invokeMethod('startRecording');
+  }
+
+  Future<void> endRecording() async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) return;
+    return _channel.invokeMethod('endRecording');
   }
 
   Future<void> restart() async {

@@ -53,17 +53,11 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
 
         channel.setMethodCallHandler(
             (call, result) -> {
-                if (call.method.equals("initialize")) {
-
-                } else if (call.method.equals("restart")) {
-                    Handler handler = new Handler(Looper.getMainLooper());
-
+              if (call.method.equals("restart")) {
                     fm.beginTransaction().remove(documentFrontFragment).commit();
                     documentFrontFragment = DocumentScanFrontFragment.newInstance();
                     documentFrontFragment.setDocumentScanListener(this);
                     fm.beginTransaction().replace(R.id.scan_front, documentFrontFragment).commit();
-
-
                 } else {
                     result.notImplemented();
                 }
@@ -81,8 +75,6 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
             @Override
             public void onViewAttachedToWindow(@NonNull View view) {
                 fm.beginTransaction().replace(R.id.scan_front, (Fragment) documentFrontFragment).commitNow();
-                Handler handler = new Handler(Looper.getMainLooper());
-
             }
 
             @Override

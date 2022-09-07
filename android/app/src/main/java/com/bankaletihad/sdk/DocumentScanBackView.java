@@ -48,19 +48,16 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
         documentBackFragment.setDocumentScanListener(this);
 
         channel.setMethodCallHandler(
-                (call, result) -> {
-                    if (call.method.equals("initialize")) {
-
-                    } else if (call.method.equals("restart")) {
-                        fm.beginTransaction().remove(documentBackFragment).commit();
-                        documentBackFragment = DocumentScanBackFragment.newInstance();
-                        documentBackFragment.setDocumentScanListener(this);
-                        fm.beginTransaction().add(R.id.scan_back, documentBackFragment).commit();
-
-                    } else {
-                        result.notImplemented();
-                    }
+            (call, result) -> {
+                if (call.method.equals("restart")) {
+                    fm.beginTransaction().remove(documentBackFragment).commit();
+                    documentBackFragment = DocumentScanBackFragment.newInstance();
+                    documentBackFragment.setDocumentScanListener(this);
+                    fm.beginTransaction().add(R.id.scan_back, documentBackFragment).commit();
+                } else {
+                    result.notImplemented();
                 }
+            }
         );
     }
 
@@ -75,7 +72,6 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
             @Override
             public void onViewAttachedToWindow(@NonNull View view) {
                 fm.beginTransaction().replace(R.id.scan_front, (Fragment) documentBackFragment).commitNow();
-
             }
 
             @Override
