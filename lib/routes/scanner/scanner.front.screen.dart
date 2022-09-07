@@ -32,19 +32,12 @@ class _PlatformChannelState extends State<ScannerFrontScreen> with RouteAware {
   }
 
   @override
-  void didPush() {
-    print('FLUTTER: didPush ScannerFrontScreen');
-  }
-
-  @override
   void didPopNext() {
-    // here back button was pressed
-    print('FLUTTER:  didPopNext ScannerFrontScreen');
+    if (!mounted) return;
     _instance.restart();
   }
 
   void initEventSubscription() {
-    debugPrint("Subscribe");
     streamSubscription =
         eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
   }
@@ -67,7 +60,6 @@ class _PlatformChannelState extends State<ScannerFrontScreen> with RouteAware {
       case "scan_front_failed":
         {
           String error = event['data'];
-          print("ERROR!!!!!!: $error");
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red.shade900,
             content: Text(

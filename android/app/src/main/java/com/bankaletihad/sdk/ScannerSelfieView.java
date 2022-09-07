@@ -2,7 +2,9 @@ package com.bankaletihad.sdk;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,10 +23,10 @@ import kyc.ob.SelfieAutoCaptureFragment;
 
 public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragment.SelfieListener {
     @NonNull
-    private final SelfieAutoCaptureFragment documentFragment;
-    private Context context;
-    private FragmentManager fm;
-    private EventSinkCallBack eventSinkCallBack;
+    private SelfieAutoCaptureFragment selfieFragment;
+    private final Context context;
+    private final FragmentManager fm;
+    private final EventSinkCallBack eventSinkCallBack;
 
     interface EventSinkCallBack {
         void run(HashMap<String, String> res);
@@ -33,7 +35,7 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
     ScannerSelfieView(
             @NonNull Context context,
             int id,
-            @Nullable Map<String,Object> creationParams,
+            @Nullable Map<String, Object> creationParams,
             MethodChannel channel,
             EventSinkCallBack eventSinkCallBack
     ) {
@@ -41,16 +43,27 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
         this.context = context;
 
         this.eventSinkCallBack = eventSinkCallBack;
-        documentFragment = SelfieAutoCaptureFragment.newInstance();
-        documentFragment.setLivelinessListener(this);
+        selfieFragment = SelfieAutoCaptureFragment.newInstance();
+        selfieFragment.setLivelinessListener(this);
 
         channel.setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.equals("initialize")) {
                         Handler handler = new Handler();
                         handler.postDelayed(() -> {
-                            fm.beginTransaction().replace(R.id.take_selfie, documentFragment).commit();
-                        }, 1000);
+                            fm.beginTransaction().replace(R.id.take_selfie, selfieFragment).commit();
+                        }, 100);
+                    } else if (call.method.equals("restart")) {
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(() -> {
+                            fm.beginTransaction().remove(selfieFragment).commit();
+
+                        }, 100);
+                        handler.postDelayed(() -> {
+                            selfieFragment = SelfieAutoCaptureFragment.newInstance();
+                            selfieFragment.setLivelinessListener(this);
+                            fm.beginTransaction().add(R.id.take_selfie, selfieFragment).commit();
+                        }, 100);
                     } else {
                         result.notImplemented();
                     }
@@ -62,8 +75,9 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
     @Override
     public View getView() {
         androidx.fragment.app.FragmentContainerView layout = new androidx.fragment.app.FragmentContainerView(context);
-        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setId(R.id.take_selfie);
+        layout.setBackgroundColor(Color.BLACK);
         return layout;
     }
 

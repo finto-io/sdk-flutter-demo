@@ -12,8 +12,10 @@ class VideoRecorderScreen extends StatefulWidget {
   State<VideoRecorderScreen> createState() => VideoRecorderScreenState();
 }
 
-class VideoRecorderScreenState extends State<VideoRecorderScreen> {
+class VideoRecorderScreenState extends State<VideoRecorderScreen>
+    with RouteAware {
   late StreamSubscription streamSubscription;
+  late CustomUIKitController _instance;
 
   static const EventChannel eventChannel =
       EventChannel('samples.flutter.io/recorderEventChannel');
@@ -26,6 +28,12 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen> {
   void initEventSubscription() {
     streamSubscription =
         eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
+  }
+
+  @override
+  void didPopNext() {
+    if (!mounted) return;
+    _instance.restart();
   }
 
   @override
@@ -80,6 +88,7 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen> {
         child: CustomUIKitView(
           viewType: ViewTypes.recorder,
           onCreated: (instance) {
+            _instance = instance;
             instance.initialize();
             initEventSubscription();
           },

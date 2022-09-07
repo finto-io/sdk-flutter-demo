@@ -18,21 +18,22 @@ import java.util.Map;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformView;
 import kyc.BaeError;
-import kyc.ob.DocumentScanFrontFragment;
+import kyc.ob.VideoFragment;
 
 import androidx.fragment.app.FragmentManager;
 
-public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFragment.DocumentScanListener {
+public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecordListener {
     @NonNull
-    private DocumentScanFrontFragment documentFrontFragment;
+    private VideoFragment videoFragment;
     private final Context context;
     private final FragmentManager fm;
     private final EventSinkCallBack eventSinkCallBack;
+
     interface EventSinkCallBack {
         void run(HashMap<String, String> res);
     }
 
-    DocumentScanFrontView(
+    VideoRecorderView(
             @NonNull Context context,
             int id,
             @Nullable Map<String,Object> creationParams,
@@ -43,31 +44,31 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
         this.context = context;
 
         this.eventSinkCallBack = eventSinkCallBack;
-        documentFrontFragment = DocumentScanFrontFragment.newInstance();
-        documentFrontFragment.setDocumentScanListener(this);
+        videoFragment = new VideoFragment();
+        videoFragment.setVideoRecordListener(this);
 
         channel.setMethodCallHandler(
-            (call, result) -> {
-                if (call.method.equals("initialize")) {
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(() -> {
-                        fm.beginTransaction().add(R.id.scan_front, documentFrontFragment).commit();
-                    }, 100);
-                } else if (call.method.equals("restart")) {
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(() -> {
-                        fm.beginTransaction().remove(documentFrontFragment).commit();
+                (call, result) -> {
+                    if (call.method.equals("initialize")) {
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(() -> {
+                            fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
+                        }, 100);
+                    } else if (call.method.equals("restart")) {
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(() -> {
+                            fm.beginTransaction().remove(videoFragment).commit();
 
-                    }, 100);
-                    handler.postDelayed(() -> {
-                        documentFrontFragment = DocumentScanFrontFragment.newInstance();
-                        documentFrontFragment.setDocumentScanListener(this);
-                        fm.beginTransaction().add(R.id.scan_front, documentFrontFragment).commit();
-                    }, 100);
-                } else {
-                    result.notImplemented();
+                        }, 100);
+                        handler.postDelayed(() -> {
+                            videoFragment = new VideoFragment();
+                            videoFragment.setVideoRecordListener(this);
+                            fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
+                        }, 100);
+                    } else {
+                        result.notImplemented();
+                    }
                 }
-            }
         );
     }
 
@@ -76,7 +77,7 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
     public View getView() {
         androidx.fragment.app.FragmentContainerView layout = new androidx.fragment.app.FragmentContainerView(context);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-        layout.setId(R.id.scan_front);
+        layout.setId(R.id.video_recorder);
         layout.setBackgroundColor(Color.BLACK);
         return layout;
     }
@@ -86,23 +87,24 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
     }
 
     @Override
-    public void onDocumentScanFrontSuccess(Bitmap bitmap) {
+    public void onVideoRecordSuccess(String url) {
         eventSinkCallBack.run(new HashMap<String, String>() {{
-            put("type", "scan_front_success");
-            put("data", "");
+            put("type", "record_success");
+            put("data", url);
         }});
     }
 
     @Override
-    public void onDocumentScanFrontFailed(BaeError baeError) {
+    public void onVideoRecordFailed(BaeError baeError) {
         eventSinkCallBack.run(new HashMap<String, String>() {{
-            put("type", "scan_front_failed");
+            put("type", "record_failed");
             put("data", baeError.getMessage());
         }});
     }
 
     @Override
-    public void onNoCameraPermission() {
+    public void onVideoRecordLoadingStarted() {
 
     }
+
 }

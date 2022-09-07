@@ -14,6 +14,7 @@ class ScannerBackScreen extends StatefulWidget {
 
 class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
   late StreamSubscription streamSubscription;
+  late CustomUIKitController _instance;
 
   static const EventChannel eventChannel =
       EventChannel('samples.flutter.io/scannerBackEventChannel');
@@ -30,10 +31,10 @@ class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
   }
 
   @override
-  void didPush() {}
-
-  @override
-  void didPopNext() {}
+  void didPopNext() {
+    if (!mounted) return;
+    _instance.restart();
+  }
 
   void initEventSubscription() {
     streamSubscription =
@@ -88,6 +89,7 @@ class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
           viewType: ViewTypes.back,
           onCreated: (instance) {
             instance.initialize();
+            _instance = instance;
             initEventSubscription();
           },
         ),

@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentManager;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.flutter.Log;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
@@ -39,7 +38,6 @@ class NativeViewFactory extends PlatformViewFactory {
 
     public void callback(HashMap<String, String> data) {
         final Handler uiThreadHandler = new Handler(Looper.getMainLooper());
-        Log.i("DATA", data.toString());
         uiThreadHandler.post(() -> {
             EVENT_SINK.success(data);
             }
@@ -61,7 +59,6 @@ class NativeViewFactory extends PlatformViewFactory {
                 return SCAN_RECORD_EVENT_CHANNEL;
             }
             default:
-                Log.i("Error", "MISSING_CHANNEL");
                 return "";
         }
     }
@@ -99,10 +96,9 @@ class NativeViewFactory extends PlatformViewFactory {
                 return new ScannerSelfieView(context, id, creationParams, channel, this::callback);
             }
             case recorder: {
-                return null;
+                return new VideoRecorderView(context, id, creationParams, channel, this::callback);
             }
             default:
-                Log.i("Error", "MISSING_VIEW");
                 return null;
         }
     }

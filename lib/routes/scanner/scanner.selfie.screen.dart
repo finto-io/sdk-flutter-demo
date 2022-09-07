@@ -12,8 +12,9 @@ class ScannerSelfieScreen extends StatefulWidget {
   State<ScannerSelfieScreen> createState() => _PlatformChannelState();
 }
 
-class _PlatformChannelState extends State<ScannerSelfieScreen> {
+class _PlatformChannelState extends State<ScannerSelfieScreen> with RouteAware {
   late StreamSubscription streamSubscription;
+  late CustomUIKitController _instance;
 
   static const EventChannel eventChannel =
       EventChannel('samples.flutter.io/scannerSelfieEventChannel');
@@ -26,6 +27,12 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
   void initEventSubscription() {
     streamSubscription =
         eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
+  }
+
+  @override
+  void didPopNext() {
+    if (!mounted) return;
+    _instance.restart();
   }
 
   @override
@@ -81,6 +88,7 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> {
           viewType: ViewTypes.selfie,
           onCreated: (instance) {
             instance.initialize();
+            _instance = instance;
             initEventSubscription();
           },
         ),

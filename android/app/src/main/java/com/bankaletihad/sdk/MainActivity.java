@@ -5,33 +5,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.HashMap;
 
-import io.flutter.Log;
-import io.flutter.embedding.android.FlutterActivity;
-import io.flutter.embedding.android.FlutterFragment;
 import io.flutter.embedding.android.FlutterFragmentActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.EventSink;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformViewRegistry;
-import io.flutter.plugins.GeneratedPluginRegistrant;
 import kyc.BaeError;
 import kyc.UploaderFile;
 import kyc.ob.BaeInitializer;
 import kyc.Uploader;
-import kyc.ob.BaeInitializer;
 import kyc.FilePicker;
-import kyc.ob.DocumentScanFrontFragment;
 
 public class MainActivity extends FlutterFragmentActivity {
     private static final String UPLOAD_METHOD_CHANNEL = "samples.flutter.io/uploaderMethodChannel";
@@ -62,6 +52,7 @@ public class MainActivity extends FlutterFragmentActivity {
         registry.registerViewFactory(Views.front.toString(), new NativeViewFactory(fm, flutterEngine, Views.front));
         registry.registerViewFactory(Views.back.toString(), new NativeViewFactory(fm, flutterEngine, Views.back));
         registry.registerViewFactory(Views.selfie.toString(), new NativeViewFactory(fm, flutterEngine, Views.selfie));
+        registry.registerViewFactory(Views.recorder.toString(), new NativeViewFactory(fm, flutterEngine, Views.recorder));
 
         new EventChannel(flutterEngine.getDartExecutor(), UPLOAD_EVENT_CHANNEL).setStreamHandler(
             new EventChannel.StreamHandler() {
@@ -107,17 +98,18 @@ public class MainActivity extends FlutterFragmentActivity {
             fileUploader.uploadDocuments(new UploaderFile.UploaderCallback() {
                 @Override
                 public void onSuccess(UploaderFile uploaderFile) {
+
                     uiThreadHandler.post(() ->
-                            EVENT_SINK.success(new HashMap<String, Object>() {{
+                            EVENT_SINK.success(new HashMap<String, String>() {{
                                 put("type", "upload_success");
-                                put("data", uploaderFile);
+                                put("data", uploaderFile.fileUrl);
                             }})
                     );
                 }
                 @Override
                 public void onFailed(BaeError baeError) {
                     uiThreadHandler.post(() ->
-                            EVENT_SINK.success(new HashMap<String, Object>() {{
+                            EVENT_SINK.success(new HashMap<String, String>() {{
                                 put("type", "upload_failed");
                                 put("data", baeError.getMessage());
                             }})
