@@ -24,7 +24,7 @@ import androidx.fragment.app.FragmentManager;
 
 public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFragment.DocumentScanListener {
     @NonNull
-    private final DocumentScanFrontFragment documentFragment;
+    private DocumentScanFrontFragment documentFragment;
     private Context context;
     private FragmentManager fm;
     private EventSinkCallBack eventSinkCallBack;
@@ -51,9 +51,20 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
                 if (call.method.equals("initialize")) {
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.postDelayed(() -> {
-                        fm.beginTransaction().replace(R.id.scan_front, documentFragment).commit();
+                        fm.beginTransaction().add(R.id.scan_front, documentFragment).commit();
                     }, 100);
                 } else if (call.method.equals("restart")) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.postDelayed(() -> {
+                        fm.beginTransaction().remove(documentFragment).commit();
+
+                    }, 2000);
+                    handler.postDelayed(() -> {
+                        documentFragment = DocumentScanFrontFragment.newInstance();
+                        documentFragment.setDocumentScanListener(this);
+                        fm.beginTransaction().add(R.id.scan_front, documentFragment).commit();
+
+                    }, 2100);
                     Log.i("RESTART", "!!!!!!!!!!!!!!!!!");
                 }
                  else {
