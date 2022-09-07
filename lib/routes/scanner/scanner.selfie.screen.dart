@@ -57,7 +57,6 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> with RouteAware {
       case "scan_selfie_failed":
         {
           String error = event['data'];
-          print("ERROR!!!!!!: $error");
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red.shade900,
             content: Text(

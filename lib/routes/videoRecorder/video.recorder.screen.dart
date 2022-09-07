@@ -142,14 +142,16 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen>
                           bottom: 0,
                           right: 0,
                           child: Container(
-                            decoration:
-                                const BoxDecoration(color: Colors.white30),
-                            child: const SizedBox(
-                              height: 40.0,
                               width: 40.0,
-                              child: CircularProgressIndicator(),
-                            ),
-                          ))
+                              height: 40.0,
+                              decoration:
+                                  const BoxDecoration(color: Colors.white30),
+                              child: Center(
+                                child: Container(
+                                    width: 16,
+                                    height: 16,
+                                    child: const CircularProgressIndicator()),
+                              )))
                       : Container()
                 ])
               : Container(),

@@ -95,7 +95,6 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
 
             @Override
             public void onViewDetachedFromWindow(@NonNull View view) {
-                Log.i("TAG", "onViewDetachedFromWindow");
             }
         });
 

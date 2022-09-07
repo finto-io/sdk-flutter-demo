@@ -77,7 +77,6 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
 
             @Override
             public void onViewDetachedFromWindow(@NonNull View view) {
-                Log.i("TAG", "onViewDetachedFromWindow");
             }
         });
         return layout;

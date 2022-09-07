@@ -81,7 +81,6 @@ class _PlatformChannelState extends State<ScannerFrontScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("BUILD");
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(title: const Text('Scan front of your ID')),

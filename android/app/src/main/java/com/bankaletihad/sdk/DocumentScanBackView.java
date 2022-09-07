@@ -76,7 +76,6 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
 
             @Override
             public void onViewDetachedFromWindow(@NonNull View view) {
-                Log.i("TAG", "onViewDetachedFromWindow");
             }
         });
         return layout;
