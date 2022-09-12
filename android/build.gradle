@@ -1,3 +1,12 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+
 buildscript {
     ext.kotlin_version = '1.6.10'
     repositories {
@@ -22,7 +31,7 @@ allprojects {
             url = uri("https://maven.pkg.github.com/BankalEtihad/sdk-kyc-Android")
             credentials {
                 username ""
-                password "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"
+                password localProperties.getProperty('token')
             }
         }
     }
