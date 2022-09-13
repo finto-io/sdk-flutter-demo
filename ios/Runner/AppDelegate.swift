@@ -79,7 +79,7 @@ import WebKit
     }
     
     private func getScanningResult(_ cb:@escaping (_ res: String)->Void) -> Void {
-        self.kyc?.inspectDocument(){ res in
+        self.kyc?.inspectDocument(){ res, err in
             do {
                 let encoder = JSONEncoder()
                 encoder.outputFormatting = .prettyPrinted
@@ -114,11 +114,11 @@ import WebKit
         eventSink(["type": ChannelEventTypes.upload_success, "data": String(describing: urls[0])])
     }
     
-    func filePickerFailed(_ controller: FilePicker, error: FilePickerError) {
+    func filePickerFailed(_ controller: FilePicker, error: BaeError) {
         guard let eventSink = eventSink else {
             return
         }
-        eventSink(["type": ChannelEventTypes.upload_failed, "data": ""])
+        eventSink(["type": ChannelEventTypes.upload_failed, "data": error.message])
     }
     
     func filePickerUploadingStarted(_ controller: FilePicker) {
