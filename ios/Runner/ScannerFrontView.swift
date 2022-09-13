@@ -29,8 +29,8 @@ public class ScannerFrontView: NSObject, FlutterPlatformView, DocumentScanFrontV
         self.callback(["type": ChannelEventTypes.scan_front_success, "data": ""])
     }
     
-    public func documentScanFrontFailed(_ controller: DocumentScanFrontViewController, error: DocumentError) {
-        self.callback(["type": ChannelEventTypes.scan_front_failed, "data": error.code])
+    public func documentScanFrontFailed(_ controller: DocumentScanFrontViewController,_ error: BaeError) {
+        self.callback(["type": ChannelEventTypes.scan_front_failed, "data": error.message])
     }
     
     public func view() -> UIView {

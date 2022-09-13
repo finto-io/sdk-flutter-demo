@@ -30,8 +30,8 @@ public class VideoRecorderView: NSObject, FlutterPlatformView, VideoViewControll
         self.callback(["type": ChannelEventTypes.record_success, "data": url])
     }
     
-    public func videoViewRecordFailed(_ controller: VideoViewController, error: Error) {
-        self.callback(["type": ChannelEventTypes.record_failed, "data": String(describing: error)])
+    public func videoViewRecordFailed(_ controller: VideoViewController,_ error: BaeError) {
+        self.callback(["type": ChannelEventTypes.record_failed, "data": error.message ])
     }
     
     public func view() -> UIView {
