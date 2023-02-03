@@ -1,4 +1,4 @@
-package com.bankaletihad.sdk;
+package com.bankaletihad.kycsdk;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.gson.GsonBuilder;
+import com.bankaletihad.sdk.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,6 @@ import java.util.Map;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformView;
 import kyc.BaeError;
-import kyc.Uploader;
 import kyc.ob.Api;
 import kyc.ob.SelfieAutoCaptureFragment;
 import kyc.ob.responses.DocumentInspectionResponse;
@@ -38,7 +37,6 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
 
     ScannerSelfieView(
             @NonNull Context context,
-            int id,
             @Nullable Map<String, Object> creationParams,
             MethodChannel channel,
             EventSinkCallBack eventSinkCallBack
@@ -90,17 +88,13 @@ public class ScannerSelfieView implements PlatformView, SelfieAutoCaptureFragmen
 
     @Override
     public void onSelfieCaptured(Bitmap bitmap) {
-        Api api = new Api(context, "");
+        Api api = new Api(context, null);
         api.inspectDocument(new Api.InspectDocumentsCallback() {
             @Override
             public void onSuccess(DocumentInspectionResponse documentInspectionResponse) {
-                String ScanningResult = new GsonBuilder()
-                        .setPrettyPrinting()
-                        .create()
-                        .toJson(documentInspectionResponse, DocumentInspectionResponse.class);
                 eventSinkCallBack.run(new HashMap<String, String>() {{
                     put("type", "scan_selfie_success");
-                    put("data", ScanningResult);
+                    put("data", "");
                 }});
             }
 

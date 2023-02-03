@@ -1,4 +1,4 @@
-package com.bankaletihad.sdk;
+package com.bankaletihad.kycsdk;
 
 public enum Views {
     back,

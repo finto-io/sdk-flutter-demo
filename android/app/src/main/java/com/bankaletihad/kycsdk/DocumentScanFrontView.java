@@ -1,4 +1,4 @@
-package com.bankaletihad.sdk;
+package com.bankaletihad.kycsdk;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,6 +19,9 @@ import kyc.ob.DocumentScanFrontFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.bankaletihad.sdk.R;
+
+
 public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFragment.DocumentScanListener {
     @NonNull
     private DocumentScanFrontFragment documentFrontFragment;
@@ -32,8 +35,7 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
 
     DocumentScanFrontView(
             @NonNull Context context,
-            int id,
-            @Nullable Map<String,Object> creationParams,
+            @Nullable Map<String, Object> creationParams,
             MethodChannel channel,
             EventSinkCallBack eventSinkCallBack
     ) {
@@ -69,7 +71,6 @@ public class DocumentScanFrontView implements PlatformView, DocumentScanFrontFra
             public void onViewAttachedToWindow(@NonNull View view) {
                 fm.beginTransaction().replace(R.id.scan_front, (Fragment) documentFrontFragment).commitNow();
             }
-
             @Override
             public void onViewDetachedFromWindow(@NonNull View view) {
             }

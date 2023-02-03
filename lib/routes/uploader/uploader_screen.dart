@@ -54,6 +54,7 @@ class _PlatformChannelState extends State<UploaderScreen> {
         });
         break;
       case "upload_success":
+        print('RESULT!!!!!!!!!!!: $event');
         setState(() {
           uploading = false;
           path = event["data"];

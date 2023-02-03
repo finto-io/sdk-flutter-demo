@@ -1,4 +1,4 @@
-package com.bankaletihad.sdk;
+package com.bankaletihad.kycsdk;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,6 +20,9 @@ import kyc.ob.DocumentScanBackFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.bankaletihad.sdk.R;
+
+
 public class DocumentScanBackView implements PlatformView, DocumentScanBackFragment.DocumentScanListener {
     @NonNull
     private DocumentScanBackFragment documentBackFragment;
@@ -33,8 +36,7 @@ public class DocumentScanBackView implements PlatformView, DocumentScanBackFragm
 
     DocumentScanBackView(
             @NonNull Context context,
-            int id,
-            @Nullable Map<String,Object> creationParams,
+            @Nullable Map<String, Object> creationParams,
             MethodChannel channel,
             EventSinkCallBack eventSinkCallBack
     ) {

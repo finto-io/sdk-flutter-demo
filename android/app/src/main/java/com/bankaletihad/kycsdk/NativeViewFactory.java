@@ -1,4 +1,4 @@
-package com.bankaletihad.sdk;
+package com.bankaletihad.kycsdk;
 
 import android.content.Context;
 import android.os.Handler;
@@ -18,18 +18,18 @@ import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.platform.PlatformView;
 import io.flutter.plugin.platform.PlatformViewFactory;
 
-class NativeViewFactory extends PlatformViewFactory {
+public class NativeViewFactory extends PlatformViewFactory {
     FragmentManager fm;
-    private static final String SCAN_FRONT_EVENT_CHANNEL = "samples.flutter.io/scannerFrontEventChannel";
-    private static final String SCAN_BACK_EVENT_CHANNEL = "samples.flutter.io/scannerBackEventChannel";
-    private static final String SCAN_SELFIE_EVENT_CHANNEL = "samples.flutter.io/scannerSelfieEventChannel";
-    private static final String SCAN_RECORD_EVENT_CHANNEL = "samples.flutter.io/recorderEventChannel";
+    private static final String SCAN_FRONT_EVENT_CHANNEL = "kyc.sdk/scannerFrontEventChannel";
+    private static final String SCAN_BACK_EVENT_CHANNEL = "kyc.sdk/scannerBackEventChannel";
+    private static final String SCAN_SELFIE_EVENT_CHANNEL = "kyc.sdk/scannerSelfieEventChannel";
+    private static final String SCAN_RECORD_EVENT_CHANNEL = "kyc.sdk/recorderEventChannel";
 
     private EventChannel.EventSink EVENT_SINK = null;
     private final FlutterEngine flutterEngine;
     private final Views viewType;
 
-    NativeViewFactory(FragmentManager fm, FlutterEngine flutterEngine, Views viewType) {
+    public NativeViewFactory(FragmentManager fm, FlutterEngine flutterEngine, Views viewType) {
         super(StandardMessageCodec.INSTANCE);
         this.fm = fm;
         this.flutterEngine = flutterEngine;
@@ -38,9 +38,7 @@ class NativeViewFactory extends PlatformViewFactory {
 
     public void callback(HashMap<String, String> data) {
         final Handler uiThreadHandler = new Handler(Looper.getMainLooper());
-        uiThreadHandler.post(() -> {
-            EVENT_SINK.success(data);
-            }
+        uiThreadHandler.post(() -> EVENT_SINK.success(data)
         );
     }
 
@@ -75,7 +73,6 @@ class NativeViewFactory extends PlatformViewFactory {
                     public void onListen(Object arguments, EventChannel.EventSink events) {
                         EVENT_SINK = events;
                     }
-
                     @Override
                     public void onCancel(Object arguments) {
                         EVENT_SINK = null;
@@ -87,16 +84,16 @@ class NativeViewFactory extends PlatformViewFactory {
 
         switch (this.viewType) {
             case front: {
-                return new DocumentScanFrontView(context, id, creationParams, channel, this::callback);
+                return new DocumentScanFrontView(context, creationParams, channel, this::callback);
             }
             case back: {
-                return new DocumentScanBackView(context, id, creationParams, channel, this::callback);
+                return new DocumentScanBackView(context, creationParams, channel, this::callback);
             }
             case selfie: {
-                return new ScannerSelfieView(context, id, creationParams, channel, this::callback);
+                return new ScannerSelfieView(context, creationParams, channel, this::callback);
             }
             case recorder: {
-                return new VideoRecorderView(context, id, creationParams, channel, this::callback);
+                return new VideoRecorderView(context, creationParams, channel, this::callback);
             }
             default:
                 return null;

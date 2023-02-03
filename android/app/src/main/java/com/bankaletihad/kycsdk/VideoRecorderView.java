@@ -1,8 +1,9 @@
-package com.bankaletihad.sdk;
+package com.bankaletihad.kycsdk;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -21,6 +22,8 @@ import kyc.ob.VideoFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.bankaletihad.sdk.R;
+
 public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecordListener {
     @NonNull
     private VideoFragment videoFragment;
@@ -35,8 +38,7 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
 
     VideoRecorderView(
             @NonNull Context context,
-            int id,
-            @Nullable Map<String,Object> creationParams,
+            @Nullable Map<String, Object> creationParams,
             MethodChannel channel,
             EventSinkCallBack eventSinkCallBack
     ) {
@@ -49,29 +51,26 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
         videoFragment.setMaxVideoLength(4);
 
         channel.setMethodCallHandler(
-            (call, result) -> {
-                switch (call.method) {
-                    case "restart":
-                        fm.beginTransaction().remove(videoFragment).commit();
-                        videoFragment = new VideoFragment();
-                        videoFragment.setVideoRecordListener(this);
-                        fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
-                        Handler handle = new Handler();
-                        handle.postDelayed(() -> {
-                            layout.findViewById(R.id.recordButton).setVisibility(View.GONE);
-                        }, 100);
-                        break;
-                    case "startRecording":
-                        videoFragment.onTouchDown();
-                        break;
-                    case "endRecording":
-                        videoFragment.onTouchUp();
-                        break;
-                    default:
-                        result.notImplemented();
-                        break;
+                (call, result) -> {
+                    switch (call.method) {
+                        case "restart":
+                            fm.beginTransaction().remove(videoFragment).commit();
+                            videoFragment = new VideoFragment();
+                            videoFragment.setVideoRecordListener(this);
+                            fm.beginTransaction().add(R.id.video_recorder, videoFragment).commit();
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> layout.findViewById(R.id.recordButton).setVisibility(View.GONE), 100);
+                            break;
+                        case "startRecording":
+                            videoFragment.onTouchDown();
+                            break;
+                        case "endRecording":
+                            videoFragment.onTouchUp();
+                            break;
+                        default:
+                            result.notImplemented();
+                            break;
+                    }
                 }
-            }
         );
     }
 
@@ -87,12 +86,8 @@ public class VideoRecorderView implements PlatformView, VideoFragment.VideoRecor
             @Override
             public void onViewAttachedToWindow(@NonNull View view) {
                 fm.beginTransaction().replace(R.id.video_recorder, (Fragment) videoFragment).commitNow();
-                Handler handle = new Handler();
-                handle.postDelayed(() -> {
-                    view.findViewById(R.id.recordButton).setVisibility(View.GONE);
-                }, 100);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> view.findViewById(R.id.recordButton).setVisibility(View.GONE), 100);
             }
-
             @Override
             public void onViewDetachedFromWindow(@NonNull View view) {
             }
