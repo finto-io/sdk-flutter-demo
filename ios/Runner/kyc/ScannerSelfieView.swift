@@ -31,7 +31,7 @@ public class ScannerSelfieView: NSObject, FlutterPlatformView, SelfieAutoCapture
         self.callback(["type": ChannelEventTypes.scan_selfie_success, "data": ""])
     }
     
-    public func selfieAutoCaptureFailed(_ controller: SelfieAutoCaptureViewController,_ error: BaeError) {
+    public func selfieAutoCaptureFailed(_ controller: SelfieAutoCaptureViewController, _ error: BaeError) {
         self.callback(["type": ChannelEventTypes.scan_selfie_failed, "data": String(describing: error.message)])
     }
     

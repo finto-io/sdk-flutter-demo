@@ -4,16 +4,13 @@ public class Factory: NSObject, FlutterPlatformViewFactory, FlutterStreamHandler
     private var eventSink: FlutterEventSink?
     let controller: FlutterViewController
     let viewType: String
-    let getScanningResult: ((_ cb: @escaping (_ res: String) -> Void)-> Void)?
     
     init(
         controller: FlutterViewController,
-        viewType: String,
-        getScanningResult: ((_ cb:@escaping (_ res: String) -> Void) -> Void)?  = nil
+        viewType: String
     ) {
         self.viewType = viewType
         self.controller = controller
-        self.getScanningResult = getScanningResult
     }
     
     public func create(
@@ -55,7 +52,7 @@ public class Factory: NSObject, FlutterPlatformViewFactory, FlutterStreamHandler
         case ViewTypes.selfie:
             return ChannelNames.scannerSelfieEventChannel
         case ViewTypes.recorder:
-            return ChannelNames.recorderEventChannel
+              return ChannelNames.recorderEventChannel
         default:
             fatalError("Incompatible viewType for event channel initialization")
         }
@@ -65,17 +62,7 @@ public class Factory: NSObject, FlutterPlatformViewFactory, FlutterStreamHandler
         guard let eventSink = eventSink else {
             return
         }
-        
-        guard let getScanningResult = getScanningResult else {
-            eventSink(data)
-            return
-        }
-        
-        getScanningResult() { res in
-            var _data = data
-            _data.updateValue(res, forKey: "data")
-            eventSink(_data)
-        }
+        eventSink(data)
     }
     
     public func onListen(withArguments arguments: Any?,

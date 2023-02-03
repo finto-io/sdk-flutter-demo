@@ -1,12 +1,13 @@
 enum ChannelNames {
-    static let uploaderMethodChannel = "samples.flutter.io/uploaderMethodChannel"
-    static let uploaderEventChannel = "samples.flutter.io/uploaderEventChannel"
-
-    static let scannerFrontEventChannel = "samples.flutter.io/scannerFrontEventChannel"
-    static let scannerBackEventChannel = "samples.flutter.io/scannerBackEventChannel"
-    static let scannerSelfieEventChannel = "samples.flutter.io/scannerSelfieEventChannel"
+    static let uploaderMethodChannel = "kyc.sdk/uploaderMethodChannel"
+    static let uploaderEventChannel = "kyc.sdk/uploaderEventChannel"
     
-    static let recorderEventChannel = "samples.flutter.io/recorderEventChannel"
+    static let scannerFrontEventChannel = "kyc.sdk/scannerFrontEventChannel"
+    static let scannerBackEventChannel = "kyc.sdk/scannerBackEventChannel"
+    static let scannerSelfieEventChannel = "kyc.sdk/scannerSelfieEventChannel"
+    
+    static let resultMethodChannel = "kyc.sdk/resultMethodChannel"
+    static let recorderEventChannel = "kyc.sdk/recorderEventChannel"
 }
 
 enum ViewTypes {
@@ -33,3 +34,4 @@ enum ChannelEventTypes {
     static let record_success = "record_success"
     static let record_failed = "record_failed"
 }
+

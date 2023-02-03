@@ -32,7 +32,7 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  pod 'kyc-sdk', '1.7.2'
+  pod 'kyc-sdk', :tag => 'v3.3.0', :git => $kycSdkSource
   use_frameworks!
   use_modular_headers!
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))

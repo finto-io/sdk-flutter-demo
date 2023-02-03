@@ -29,7 +29,7 @@ public class ScannerBackView: NSObject, FlutterPlatformView, DocumentScanBackVie
         self.callback(["type": ChannelEventTypes.scan_back_success, "data": ""])
     }
     
-    public func documentScanBackFailed(_ controller: DocumentScanBackViewController,_ error: BaeError) {
+    public func documentScanBackFailed(_ controller: DocumentScanBackViewController, _ error: BaeError) {
         self.callback(["type": ChannelEventTypes.scan_back_failed, "data": error.message])
     }
     
