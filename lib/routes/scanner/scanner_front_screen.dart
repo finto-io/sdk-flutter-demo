@@ -2,22 +2,24 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/customUiKitView.dart';
+import 'package:flutter_kyc_demo/components/CustomUIKitView.dart';
 import 'package:flutter_kyc_demo/enums/enums.dart';
 import 'package:flutter_kyc_demo/main.dart';
+import 'package:flutter_kyc_demo/routes/router_list.dart';
 
-class ScannerBackScreen extends StatefulWidget {
-  const ScannerBackScreen({super.key});
+class ScannerFrontScreen extends StatefulWidget {
+  const ScannerFrontScreen({super.key});
   @override
-  State<ScannerBackScreen> createState() => _PlatformChannelState();
+  State<ScannerFrontScreen> createState() => _PlatformChannelState();
 }
 
-class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
+class _PlatformChannelState extends State<ScannerFrontScreen> with RouteAware {
   late StreamSubscription streamSubscription;
+
   late CustomUIKitController _instance;
 
   static const EventChannel eventChannel =
-      EventChannel('samples.flutter.io/scannerBackEventChannel');
+      EventChannel('kyc.sdk/scannerFrontEventChannel');
 
   @override
   void didChangeDependencies() {
@@ -45,17 +47,18 @@ class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
   void dispose() {
     super.dispose();
     streamSubscription.cancel();
+    routeObserver.unsubscribe(this);
   }
 
   onEvent(event) {
     if (!mounted) return;
     switch (event["type"]) {
-      case "scan_back_success":
+      case "scan_front_success":
         {
-          Navigator.pushNamed(context, '/scanner-selfie');
+          Navigator.pushNamed(context, RoutesList.scannerBack);
         }
         break;
-      case "scan_back_failed":
+      case "scan_front_failed":
         {
           String error = event['data'];
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -65,7 +68,7 @@ class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
               textAlign: TextAlign.left,
             ),
           ));
-          Navigator.popUntil(context, ModalRoute.withName('/'));
+          _instance.restart();
         }
         break;
       default:
@@ -81,14 +84,14 @@ class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(title: const Text('Scan back of your ID')),
+      appBar: AppBar(title: const Text('Scan front of your ID')),
       body: SafeArea(
         minimum: const EdgeInsets.all(0.0),
         child: CustomUIKitView(
-          viewType: ViewTypes.back,
+          viewType: ViewTypes.front,
           onCreated: (instance) {
-            instance.initialize();
             _instance = instance;
+            instance.initialize();
             initEventSubscription();
           },
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kyc_demo/routes/router_list.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_kyc_demo/components/customButton.dart';
 
@@ -34,7 +35,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   void navigateToScanner() {
     if (mounted) {
-      Navigator.pushNamed(context, '/scanner-front');
+      Navigator.pushNamed(context, RoutesList.scannerFront);
     }
   }
 
@@ -64,7 +65,7 @@ class HomeScreenState extends State<HomeScreen> {
             CustomButton(
               label: 'Uploader',
               onPressed: () {
-                Navigator.pushNamed(context, '/uploader');
+                Navigator.pushNamed(context, RoutesList.uploader);
               },
             ),
             const Divider(),
@@ -76,7 +77,7 @@ class HomeScreenState extends State<HomeScreen> {
             CustomButton(
               label: 'Video recorder',
               onPressed: () {
-                Navigator.pushNamed(context, '/video-recorder');
+                Navigator.pushNamed(context, RoutesList.videoRecorder);
               },
             ),
           ],

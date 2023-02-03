@@ -18,10 +18,10 @@ class _PlatformChannelState extends State<UploaderScreen> {
   late StreamSubscription streamSubscription;
 
   static const EventChannel eventChannel =
-      EventChannel('samples.flutter.io/uploaderEventChannel');
+      EventChannel('kyc.sdk/uploaderEventChannel');
 
   static const MethodChannel methodChannel =
-      MethodChannel('samples.flutter.io/uploaderMethodChannel');
+      MethodChannel('kyc.sdk/uploaderMethodChannel');
 
   Future<void> initUploader() async {
     try {

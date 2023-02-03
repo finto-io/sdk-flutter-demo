@@ -2,31 +2,33 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/customUiKitView.dart';
+import 'package:flutter_kyc_demo/components/CustomUIKitView.dart';
 import 'package:flutter_kyc_demo/enums/enums.dart';
-import 'package:flutter_kyc_demo/routes/scanner/scanner.result.screen.dart';
+import 'package:flutter_kyc_demo/main.dart';
+import 'package:flutter_kyc_demo/routes/router_list.dart';
 
-class ScannerSelfieScreen extends StatefulWidget {
-  const ScannerSelfieScreen({super.key});
+class ScannerBackScreen extends StatefulWidget {
+  const ScannerBackScreen({super.key});
   @override
-  State<ScannerSelfieScreen> createState() => _PlatformChannelState();
+  State<ScannerBackScreen> createState() => _PlatformChannelState();
 }
 
-class _PlatformChannelState extends State<ScannerSelfieScreen> with RouteAware {
+class _PlatformChannelState extends State<ScannerBackScreen> with RouteAware {
   late StreamSubscription streamSubscription;
   late CustomUIKitController _instance;
 
   static const EventChannel eventChannel =
-      EventChannel('samples.flutter.io/scannerSelfieEventChannel');
+      EventChannel('kyc.sdk/scannerBackEventChannel');
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState() {
     super.initState();
-  }
-
-  void initEventSubscription() {
-    streamSubscription =
-        eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
   }
 
   @override
@@ -35,26 +37,27 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> with RouteAware {
     _instance.restart();
   }
 
+  void initEventSubscription() {
+    streamSubscription =
+        eventChannel.receiveBroadcastStream().listen(onEvent, onError: onError);
+  }
+
   @override
   void dispose() {
     super.dispose();
+    routeObserver.unsubscribe(this);
     streamSubscription.cancel();
   }
 
   onEvent(event) {
     if (!mounted) return;
     switch (event["type"]) {
-      case "scan_selfie_success":
+      case "scan_back_success":
         {
-          Navigator.push(
-            context,
-            MaterialPageRoute<String>(
-              builder: (context) => ScannerResultScreen(result: event["data"]),
-            ),
-          );
+          Navigator.pushNamed(context, RoutesList.scannerSelfie);
         }
         break;
-      case "scan_selfie_failed":
+      case "scan_back_failed":
         {
           String error = event['data'];
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -64,7 +67,7 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> with RouteAware {
               textAlign: TextAlign.left,
             ),
           ));
-          Navigator.popUntil(context, ModalRoute.withName('/'));
+          _instance.restart();
         }
         break;
       default:
@@ -80,11 +83,11 @@ class _PlatformChannelState extends State<ScannerSelfieScreen> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(title: const Text('Please take a selfie')),
+      appBar: AppBar(title: const Text('Scan back of your ID')),
       body: SafeArea(
         minimum: const EdgeInsets.all(0.0),
         child: CustomUIKitView(
-          viewType: ViewTypes.selfie,
+          viewType: ViewTypes.back,
           onCreated: (instance) {
             instance.initialize();
             _instance = instance;

@@ -3,18 +3,17 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_kyc_demo/components/CustomButton.dart';
-import 'package:flutter_kyc_demo/components/customUiKitView.dart';
+import 'package:flutter_kyc_demo/components/CustomUIKitView.dart';
 import 'package:flutter_kyc_demo/enums/enums.dart';
-import 'package:flutter_kyc_demo/routes/videoRecorder/video.recorder.result.screen.dart';
+import 'package:flutter_kyc_demo/routes/scanner/scanner_result_screen.dart';
 
-class VideoRecorderScreen extends StatefulWidget {
-  const VideoRecorderScreen({super.key});
+class ScannerRecorderScreen extends StatefulWidget {
+  const ScannerRecorderScreen({super.key});
   @override
-  State<VideoRecorderScreen> createState() => VideoRecorderScreenState();
+  State<ScannerRecorderScreen> createState() => ScannerRecorderScreenState();
 }
 
-class VideoRecorderScreenState extends State<VideoRecorderScreen>
+class ScannerRecorderScreenState extends State<ScannerRecorderScreen>
     with RouteAware {
   late StreamSubscription streamSubscription;
   late CustomUIKitController _instance;
@@ -22,7 +21,7 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen>
   bool uploading = false;
 
   static const EventChannel eventChannel =
-      EventChannel('samples.flutter.io/recorderEventChannel');
+      EventChannel('kyc.sdk/recorderEventChannel');
 
   @override
   void initState() {
@@ -58,7 +57,7 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen>
             context,
             MaterialPageRoute<String>(
               builder: (context) =>
-                  VideoRecorderResultScreen(result: event["data"]),
+                  ScannerResultScreen(videoRecord: event["data"]),
             ),
           );
         }
@@ -80,6 +79,9 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen>
               textAlign: TextAlign.left,
             ),
           ));
+          setState(() {
+            uploading = false;
+          });
         }
         break;
       default:
@@ -154,7 +156,7 @@ class VideoRecorderScreenState extends State<VideoRecorderScreen>
                               )))
                       : Container()
                 ])
-              : Container(),
+              : Container()
         ]));
   }
 }
