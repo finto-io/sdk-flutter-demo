@@ -32,8 +32,8 @@ private const val UPLOAD_EVENT_CHANNEL = "kyc.sdk/uploaderEventChannel"
 private const val UPLOADER_URL =
     "https://bl4-dev-02.baelab.net/api/BAF3E974-52AA-7598-FF04-56945EF93500/48EE4790-8AEF-FEA5-FFB6-202374C61700"
 
-class MainActivity : FlutterFragmentActivity() {
-    private var EVENT_SINK: EventSink? = null
+class MainActivity : FlutterFragmentActivity(), EventChannel.StreamHandler {
+    private var eventSink : EventSink? = null
     private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,7 +137,6 @@ class MainActivity : FlutterFragmentActivity() {
                             override fun onSuccess(response: Double) {
                                 result.success(response)
                             }
-
                             override fun onFail(error: BaeError) {
                                 result.error(error.code.toString(), error.message, null)
                             }
@@ -151,16 +150,6 @@ class MainActivity : FlutterFragmentActivity() {
                 }
             }
         }
-        EventChannel(flutterEngine.dartExecutor, UPLOAD_EVENT_CHANNEL).setStreamHandler(
-            object : EventChannel.StreamHandler {
-                override fun onListen(arguments: Any, events: EventSink) {
-                    EVENT_SINK = events
-                }
-                override fun onCancel(arguments: Any) {
-                    EVENT_SINK = null
-                }
-            }
-        )
 
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
@@ -174,6 +163,19 @@ class MainActivity : FlutterFragmentActivity() {
                 }
             }
         }
+
+
+        val event = EventChannel(flutterEngine.dartExecutor.binaryMessenger, UPLOAD_EVENT_CHANNEL)
+        event.setStreamHandler(this)
+    }
+
+
+    override fun onListen(arguments: Any?, events: EventSink?) {
+        eventSink = events
+    }
+
+    override fun onCancel(arguments: Any?) {
+        eventSink = null
     }
 
     private fun initializeUploader() {
@@ -189,9 +191,8 @@ class MainActivity : FlutterFragmentActivity() {
             val isLoading:HashMap<String?,String?> = HashMap()
             isLoading["type"] = "upload_started"
             isLoading["data"] = ""
-
             uiThreadHandler.post {
-                EVENT_SINK?.success(isLoading)
+                eventSink?.success(isLoading)
             }
 
             val fileUploader = Uploader(this, UPLOADER_URL)
@@ -202,7 +203,7 @@ class MainActivity : FlutterFragmentActivity() {
                     successResult["type"] = "upload_success"
                     successResult["data"] = uploaderFile.fileUrl
                     uiThreadHandler.post {
-                        EVENT_SINK?.success(successResult)
+                        eventSink?.success(successResult)
                     }
                 }
 
@@ -212,7 +213,7 @@ class MainActivity : FlutterFragmentActivity() {
                     errorResult["data"] = baeError.message
                     println(errorResult)
                     uiThreadHandler.post {
-                        EVENT_SINK?.success(errorResult)
+                        eventSink?.success(errorResult)
                     }
                 }
             })
